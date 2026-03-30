@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "14.2.21",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "@splinetool/react-spline": "^4.1.0",
+    "@splinetool/runtime": "^1.12.73",
+    "clsx": "^2.1.1",
     "framer-motion": "^11.15.0",
     "lucide-react": "^0.468.0",
-    "clsx": "^2.1.1"
+    "next": "14.2.21",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^20.17.0",

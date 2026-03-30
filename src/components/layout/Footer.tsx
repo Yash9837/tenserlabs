@@ -36,20 +36,20 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-surface-border bg-surface">
-      <div className="max-w-7xl mx-auto px-6 py-16">
+    <footer className="bg-[#0F172A] border-t border-slate-800">
+      <div className="max-w-container mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-mono font-bold text-white text-sm">
+            <Link href="/" className="flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-bold text-white text-sm">
                 T
               </div>
-              <span className="font-mono font-bold text-lg">
-                Tenser<span className="text-accent">Labs</span>
+              <span className="font-bold text-lg text-white">
+                Tenser<span className="text-accent-light">Labs</span>
               </span>
             </Link>
-            <p className="text-muted text-sm leading-relaxed mb-6">
+            <p className="text-slate-400 text-sm leading-relaxed mb-6">
               Engineering Tomorrow&apos;s Code, Today. We transform ambitious ideas
               into scalable, production-grade digital products.
             </p>
@@ -60,7 +60,7 @@ export default function Footer() {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-lg bg-surface-lighter flex items-center justify-center text-muted hover:text-accent hover:bg-surface-border transition-colors"
+                  className="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-accent-light hover:bg-slate-700 border border-slate-700 transition-all"
                   aria-label={s.label}
                 >
                   <s.icon size={16} />
@@ -71,7 +71,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-mono text-sm font-semibold text-foreground mb-4 uppercase tracking-wider">
+            <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
               Quick Links
             </h4>
             <ul className="space-y-2.5">
@@ -79,7 +79,7 @@ export default function Footer() {
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="text-sm text-muted hover:text-accent transition-colors"
+                    className="text-sm text-slate-400 hover:text-accent-light transition-colors"
                   >
                     {l.label}
                   </Link>
@@ -90,13 +90,13 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="font-mono text-sm font-semibold text-foreground mb-4 uppercase tracking-wider">
+            <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
               Services
             </h4>
             <ul className="space-y-2.5">
               {services.map((s) => (
                 <li key={s}>
-                  <span className="text-sm text-muted">{s}</span>
+                  <span className="text-sm text-slate-400">{s}</span>
                 </li>
               ))}
             </ul>
@@ -104,21 +104,21 @@ export default function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h4 className="font-mono text-sm font-semibold text-foreground mb-4 uppercase tracking-wider">
+            <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
               Stay Updated
             </h4>
-            <p className="text-sm text-muted mb-4">
+            <p className="text-sm text-slate-400 mb-4">
               Get insights on tech, engineering culture, and our latest work.
             </p>
             <form className="flex gap-2">
               <input
                 type="email"
                 placeholder="you@company.com"
-                className="flex-1 px-3 py-2 text-sm bg-surface-lighter border border-surface-border rounded-lg text-foreground placeholder:text-muted/50 focus:outline-none focus:border-accent transition-colors"
+                className="flex-1 px-3 py-2 text-sm bg-slate-800 border border-slate-700 rounded-lg text-white placeholder:text-slate-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20 transition-all"
               />
               <button
                 type="submit"
-                className="p-2 bg-accent hover:bg-accent-light rounded-lg text-white transition-colors"
+                className="p-2.5 bg-accent hover:bg-accent-light rounded-lg text-white transition-colors"
               >
                 <ArrowRight size={16} />
               </button>
@@ -128,16 +128,16 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-surface-border">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row justify-between items-center gap-3">
-          <p className="text-xs text-muted">
-            © {new Date().getFullYear()} TenserLabs. All rights reserved.
+      <div className="border-t border-slate-800">
+        <div className="max-w-container mx-auto px-6 py-5 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <p className="text-xs text-slate-500">
+            &copy; {new Date().getFullYear()} TenserLabs. All rights reserved.
           </p>
-          <div className="flex gap-6 text-xs text-muted">
-            <Link href="/privacy" className="hover:text-accent transition-colors">
+          <div className="flex gap-6 text-xs text-slate-500">
+            <Link href="/privacy" className="hover:text-accent-light transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-accent transition-colors">
+            <Link href="/terms" className="hover:text-accent-light transition-colors">
               Terms of Service
             </Link>
           </div>

@@ -43,7 +43,7 @@ const openings = [
     team: "Design",
     location: "Remote",
     type: "Full-Time",
-    description: "Craft developer-centric interfaces and design systems for SaaS products.",
+    description: "Craft intuitive interfaces and design systems for SaaS products.",
   },
   {
     title: "React Native Developer",
@@ -73,23 +73,23 @@ function JobCard({ job, index }: { job: typeof openings[0]; index: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay: index * 0.08 }}
-      className="group p-6 rounded-xl bg-surface-light border border-surface-border hover:border-accent/30 transition-all card-glow"
+      className="group p-6 rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-accent/30 transition-all card-hover"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-accent/10 text-accent rounded-full border border-accent/20">
+            <span className="px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider bg-accent/10 text-accent-light rounded-full border border-accent/20">
               {job.team}
             </span>
-            <span className="px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-surface-lighter text-muted rounded-full border border-surface-border">
+            <span className="px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider bg-slate-800 text-slate-400 rounded-full border border-slate-700">
               {job.type}
             </span>
           </div>
-          <h3 className="font-mono font-semibold text-lg mb-2 group-hover:text-accent transition-colors">
+          <h3 className="font-bold text-lg mb-2 text-white group-hover:text-accent transition-colors">
             {job.title}
           </h3>
-          <p className="text-sm text-muted mb-3">{job.description}</p>
-          <div className="flex items-center gap-4 text-xs text-muted">
+          <p className="text-sm text-slate-400 mb-3">{job.description}</p>
+          <div className="flex items-center gap-4 text-xs text-slate-500">
             <span className="flex items-center gap-1">
               <MapPin size={12} /> {job.location}
             </span>
@@ -100,9 +100,9 @@ function JobCard({ job, index }: { job: typeof openings[0]; index: number }) {
         </div>
         <Link
           href="/contact"
-          className="flex-shrink-0 p-2 rounded-lg border border-surface-border hover:border-accent/50 text-muted hover:text-accent transition-all"
+          className="flex-shrink-0 px-4 py-2 rounded-lg bg-accent/10 text-accent-light text-sm font-medium hover:bg-accent hover:text-white transition-all"
         >
-          <ArrowRight size={16} />
+          Apply
         </Link>
       </div>
     </motion.div>
@@ -111,25 +111,29 @@ function JobCard({ job, index }: { job: typeof openings[0]; index: number }) {
 
 export default function CareersPage() {
   return (
-    <div className="pt-24">
-      {/* Hero */}
-      <section className="max-w-4xl mx-auto px-6 py-16 text-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <span className="inline-block px-3 py-1 text-xs font-mono font-medium text-accent bg-accent/10 rounded-full border border-accent/20 mb-4">
-            // join us
-          </span>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-mono tracking-tight mb-6">
-            Build Your <span className="gradient-text">Career</span>
-          </h1>
-          <p className="text-muted text-lg leading-relaxed max-w-2xl mx-auto">
-            Join a team of world-class engineers building cutting-edge software for ambitious companies. Remote-first. No BS.
-          </p>
-        </motion.div>
+    <div>
+      {/* Hero — Dark */}
+      <section className="pt-32 pb-20 relative overflow-hidden">
+        <div className="absolute inset-0 grid-bg-dark" />
+        <div className="absolute top-1/2 right-1/4 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px]" />
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-light bg-accent/15 rounded-full border border-accent/25 mb-4">
+              Careers
+            </span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 text-white">
+              Build <span className="gradient-text">with us</span>
+            </h1>
+            <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+              Join a team of world-class engineers building cutting-edge software for ambitious companies. Remote-first. No BS.
+            </p>
+          </motion.div>
+        </div>
       </section>
 
       {/* Perks */}
       <SectionWrapper className="max-w-5xl mx-auto px-6 !pt-0">
-        <SectionHeading badge="{ perks }" title="Life at TenserLabs" />
+        <SectionHeading badge="Perks" title="Life at TenserLabs" />
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {perks.map((perk, i) => (
             <motion.div
@@ -138,13 +142,13 @@ export default function CareersPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="p-5 rounded-xl bg-surface-light border border-surface-border text-center"
+              className="p-5 rounded-xl bg-slate-800/50 border border-slate-700/50 text-center card-hover"
             >
               <div className="w-10 h-10 mx-auto rounded-lg bg-accent/10 flex items-center justify-center mb-3">
-                <perk.icon size={20} className="text-accent" />
+                <perk.icon size={20} className="text-accent-light" />
               </div>
-              <h4 className="font-mono font-semibold text-sm mb-1">{perk.label}</h4>
-              <p className="text-xs text-muted">{perk.description}</p>
+              <h4 className="font-semibold text-sm mb-1 text-white">{perk.label}</h4>
+              <p className="text-xs text-slate-400">{perk.description}</p>
             </motion.div>
           ))}
         </div>
@@ -153,7 +157,7 @@ export default function CareersPage() {
       {/* Open Positions */}
       <SectionWrapper className="max-w-4xl mx-auto px-6">
         <SectionHeading
-          badge="// open roles"
+          badge="Open Roles"
           title="Open Positions"
           description="We're always looking for exceptional engineers. If you don't see a fit, reach out anyway."
         />
@@ -166,17 +170,17 @@ export default function CareersPage() {
 
       {/* General Application */}
       <SectionWrapper className="max-w-4xl mx-auto px-6">
-        <div className="bg-surface-light border border-surface-border rounded-2xl p-10 md:p-14 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold font-mono mb-4">
+        <div className="bg-gradient-to-br from-slate-800 via-[#1E1B4B]/50 to-slate-800 border border-slate-700/50 rounded-2xl p-10 md:p-14 text-center">
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-4 text-white">
             Don&apos;t see your role?
           </h2>
-          <p className="text-muted text-lg mb-8 max-w-xl mx-auto">
+          <p className="text-slate-400 text-lg mb-8 max-w-xl mx-auto">
             We&apos;re always interested in meeting talented people. Send us your resume and
             tell us what you&apos;re passionate about.
           </p>
           <Link
             href="/contact"
-            className="group inline-flex items-center gap-2 px-8 py-3.5 bg-accent hover:bg-accent-light text-white font-medium rounded-lg transition-all hover:shadow-[0_0_30px_rgba(108,99,255,0.3)]"
+            className="group inline-flex items-center gap-2 px-8 py-3.5 bg-accent hover:bg-accent-light text-white font-medium rounded-lg transition-all hover:shadow-lg hover:shadow-accent/20"
           >
             General Application
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />

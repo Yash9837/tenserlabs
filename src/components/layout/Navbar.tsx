@@ -30,82 +30,89 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-surface/80 backdrop-blur-xl border-b border-surface-border"
+          ? "bg-[#0F172A]/90 backdrop-blur-xl border-b border-slate-800"
           : "bg-transparent"
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-mono font-bold text-white text-sm group-hover:shadow-[0_0_20px_rgba(108,99,255,0.4)] transition-shadow">
+      <nav className="max-w-container mx-auto px-6 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center font-bold text-white text-sm group-hover:shadow-lg group-hover:shadow-accent/20 transition-shadow">
             T
           </div>
-          <span className="font-mono font-bold text-lg text-foreground">
-            Tenser<span className="text-accent">Labs</span>
+          <span className="font-bold text-lg text-white">
+            Tenser<span className="text-accent-light">Labs</span>
           </span>
         </Link>
 
-        {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-1">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="px-3 py-2 text-sm text-muted hover:text-foreground transition-colors rounded-lg hover:bg-surface-lighter"
+              className="px-3 py-2 text-sm text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/5"
             >
               {link.label}
             </Link>
           ))}
         </div>
 
-        {/* Desktop CTA */}
         <div className="hidden lg:flex items-center gap-3">
           <Link
             href="/contact"
-            className="px-5 py-2 text-sm font-medium bg-accent hover:bg-accent-light text-white rounded-lg transition-all hover:shadow-[0_0_20px_rgba(108,99,255,0.3)]"
+            className="px-5 py-2.5 text-sm font-medium bg-accent hover:bg-accent-light text-white rounded-lg transition-all hover:shadow-lg hover:shadow-accent/25"
           >
             Get a Quote
           </Link>
         </div>
 
-        {/* Mobile Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden p-2 text-muted hover:text-foreground"
+          className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
         >
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </nav>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-surface/95 backdrop-blur-xl border-b border-surface-border overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden fixed inset-0 top-16 bg-[#0F172A]/98 backdrop-blur-xl z-40"
           >
-            <div className="px-6 py-4 space-y-1">
-              {navLinks.map((link) => (
-                <Link
+            <div className="px-6 py-8 space-y-1">
+              {navLinks.map((link, i) => (
+                <motion.div
                   key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="block px-3 py-2.5 text-sm text-muted hover:text-foreground hover:bg-surface-lighter rounded-lg transition-colors"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05, duration: 0.3 }}
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="block px-4 py-3 text-lg font-medium text-white hover:text-accent-light rounded-lg transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
               ))}
-              <div className="pt-3 border-t border-surface-border">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.3 }}
+                className="pt-6"
+              >
                 <Link
                   href="/contact"
                   onClick={() => setMobileOpen(false)}
-                  className="block w-full text-center px-5 py-2.5 text-sm font-medium bg-accent hover:bg-accent-light text-white rounded-lg transition-all"
+                  className="block w-full text-center px-5 py-3 text-base font-medium bg-accent hover:bg-accent-light text-white rounded-lg transition-all"
                 >
                   Get a Quote
                 </Link>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
         )}

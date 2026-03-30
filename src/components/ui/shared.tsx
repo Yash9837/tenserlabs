@@ -39,15 +39,15 @@ export function SectionHeading({
   return (
     <div className="text-center mb-16">
       {badge && (
-        <span className="inline-block px-3 py-1 text-xs font-mono font-medium text-accent bg-accent/10 rounded-full border border-accent/20 mb-4">
+        <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-light bg-accent/15 rounded-full border border-accent/25 mb-4">
           {badge}
         </span>
       )}
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-mono tracking-tight mb-4">
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-4">
         {title}
       </h2>
       {description && (
-        <p className="text-muted text-lg max-w-2xl mx-auto leading-relaxed">
+        <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
           {description}
         </p>
       )}
@@ -79,17 +79,17 @@ export function AnimatedCounter({ target, label }: { target: number; label: stri
 
   return (
     <div ref={ref} className="text-center">
-      <div className="text-3xl md:text-4xl font-bold font-mono gradient-text">
+      <div className="text-3xl md:text-4xl font-extrabold gradient-text">
         {count}+
       </div>
-      <div className="text-sm text-muted mt-1">{label}</div>
+      <div className="text-sm text-slate-400 mt-1">{label}</div>
     </div>
   );
 }
 
 export function TechBadge({ name }: { name: string }) {
   return (
-    <span className="inline-flex items-center px-2.5 py-1 text-xs font-mono bg-surface-lighter text-muted border border-surface-border rounded-full">
+    <span className="inline-flex items-center px-2.5 py-1 text-xs font-medium bg-slate-800/50 text-slate-300 border border-slate-700/50 rounded-full">
       {name}
     </span>
   );
