@@ -44,3 +44,4 @@ Build with Next.js (App Router) + Tailwind CSS + Framer Motion. Use Spline or Th
 
 What to Avoid
 No stock photos of people shaking hands or pointing at screens. No walls of text — every section should be scannable. No more than 2 fonts. No autoplay video with sound. No cookie-cutter SaaS templates — this should feel custom. No rainbow gradient overuse. No tiny gray text on white backgrounds.
+

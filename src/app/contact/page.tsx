@@ -25,7 +25,13 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Thanks for reaching out! We'll get back to you within 24 hours.");
+    const subject = encodeURIComponent(
+      `New Project Inquiry from ${formData.name}${formData.company ? ` (${formData.company})` : ""}`
+    );
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company || "N/A"}\nBudget: ${formData.budget || "N/A"}\n\nProject Description:\n${formData.message}`
+    );
+    window.location.href = `mailto:contact@tenserlabs.com?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -145,17 +151,17 @@ export default function ContactPage() {
             <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-6">
               <h4 className="font-semibold text-sm mb-5 uppercase tracking-wider text-accent-light">Contact Info</h4>
               <div className="space-y-4">
-                <a href="mailto:hello@tenserlabs.com" className="flex items-center gap-3 text-sm text-slate-400 hover:text-accent-light transition-colors">
+                <a href="mailto:contact@tenserlabs.com" className="flex items-center gap-3 text-sm text-slate-400 hover:text-accent-light transition-colors">
                   <Mail size={18} className="text-accent/60" />
-                  hello@tenserlabs.com
+                  contact@tenserlabs.com
                 </a>
-                <a href="tel:+1234567890" className="flex items-center gap-3 text-sm text-slate-400 hover:text-accent-light transition-colors">
+                <a href="tel:+917303426763" className="flex items-center gap-3 text-sm text-slate-400 hover:text-accent-light transition-colors">
                   <Phone size={18} className="text-accent/60" />
-                  +1 (234) 567-890
+                  +91 73034 26763
                 </a>
                 <div className="flex items-start gap-3 text-sm text-slate-400">
                   <MapPin size={18} className="text-accent/60 flex-shrink-0 mt-0.5" />
-                  <span>San Francisco, CA<br />Remote-first worldwide</span>
+                  <span>Remote-first worldwide</span>
                 </div>
               </div>
             </div>
