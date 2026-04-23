@@ -44,21 +44,21 @@ export default function Testimonials() {
   }, []);
 
   return (
-    <section className="py-20 md:py-28 bg-[#0F172A] relative overflow-hidden">
-      <div className="absolute inset-0 grid-bg-dark" />
+    <section className="py-20 md:py-28 bg-[#FAFAF7] relative overflow-hidden">
+      <div className="absolute inset-0 grid-bg" />
       {/* Subtle gradient orb */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[150px]" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6">
         {/* Heading */}
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-light bg-accent/15 rounded-full border border-accent/25 mb-4">
+          <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-dark bg-accent/15 rounded-full border border-accent/25 mb-4">
             Testimonials
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
             What Clients Say
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
             Don&apos;t just take our word for it.
           </p>
         </div>
@@ -71,17 +71,17 @@ export default function Testimonials() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -30 }}
               transition={{ duration: 0.3 }}
-              className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-8 md:p-12 text-center backdrop-blur-sm"
+              className="bg-white/80 border border-slate-200/80 rounded-2xl p-8 md:p-12 text-center backdrop-blur-sm"
             >
               <Quote size={32} className="text-accent/30 mx-auto mb-6" />
-              <blockquote className="text-lg md:text-xl text-slate-200 leading-relaxed mb-8 font-light">
+              <blockquote className="text-lg md:text-xl text-slate-700 leading-relaxed mb-8 font-light">
                 &ldquo;{testimonials[current].quote}&rdquo;
               </blockquote>
               <div>
-                <div className="font-semibold text-white">
+                <div className="font-semibold text-slate-900">
                   {testimonials[current].name}
                 </div>
-                <div className="text-sm text-slate-400 mt-1">
+                <div className="text-sm text-slate-500 mt-1">
                   {testimonials[current].title}
                 </div>
               </div>
@@ -92,7 +92,7 @@ export default function Testimonials() {
           <div className="flex items-center justify-center gap-4 mt-8">
             <button
               onClick={prev}
-              className="p-2 rounded-lg border border-slate-700 hover:border-accent/50 text-slate-500 hover:text-accent-light transition-colors"
+              className="p-2 rounded-lg border border-slate-200 hover:border-accent/50 text-slate-500 hover:text-accent-dark transition-colors"
             >
               <ChevronLeft size={18} />
             </button>
@@ -102,14 +102,14 @@ export default function Testimonials() {
                   key={i}
                   onClick={() => setCurrent(i)}
                   className={`h-2 rounded-full transition-all ${
-                    i === current ? "bg-accent w-6" : "bg-slate-600 w-2"
+                    i === current ? "bg-accent w-6" : "bg-slate-200 w-2"
                   }`}
                 />
               ))}
             </div>
             <button
               onClick={next}
-              className="p-2 rounded-lg border border-slate-700 hover:border-accent/50 text-slate-500 hover:text-accent-light transition-colors"
+              className="p-2 rounded-lg border border-slate-200 hover:border-accent/50 text-slate-500 hover:text-accent-dark transition-colors"
             >
               <ChevronRight size={18} />
             </button>

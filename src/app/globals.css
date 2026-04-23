@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --background: #0F172A;
-  --foreground: #F8FAFC;
+  /* Warm off-white background, deep slate foreground (Truvista-inspired) */
+  --background: #FAFAF7;
+  --foreground: #0F172A;
 }
 
 /* ── Smooth scroll ───────────────────────── */
@@ -17,20 +18,20 @@ html {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0F172A;
+  background: #F3F4EE;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #CBD5CB;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7C3AED;
+  background: #7C9A6B;
 }
 
 /* ── Selection ───────────────────────────── */
 ::selection {
-  background: rgba(124, 58, 237, 0.3);
-  color: #fff;
+  background: rgba(124, 154, 107, 0.25);
+  color: #0F172A;
 }
 
 /* ── Base ────────────────────────────────── */
@@ -42,24 +43,31 @@ body {
 /* ── Grid Background ─────────────────────── */
 .grid-bg {
   background-image:
-    linear-gradient(rgba(124, 58, 237, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(124, 58, 237, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(124, 154, 107, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 154, 107, 0.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.grid-bg-dark {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
 .dot-bg {
-  background-image: radial-gradient(rgba(124, 58, 237, 0.12) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(124, 154, 107, 0.18) 1px, transparent 1px);
   background-size: 30px 30px;
 }
 
-/* ── Glow Effects ────────────────────────── */
+/* ── Glow / Soft Border Effects ──────────── */
 .glow-border {
-  border: 1px solid rgba(124, 58, 237, 0.2);
+  border: 1px solid rgba(124, 154, 107, 0.25);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .glow-border:hover {
-  border-color: rgba(124, 58, 237, 0.5);
-  box-shadow: 0 0 24px rgba(124, 58, 237, 0.12);
+  border-color: rgba(124, 154, 107, 0.55);
+  box-shadow: 0 0 22px rgba(124, 154, 107, 0.15);
 }
 
 .card-hover {
@@ -67,13 +75,15 @@ body {
 }
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(124, 58, 237, 0.12), 0 4px 12px rgba(0, 0, 0, 0.3);
-  border-color: rgba(124, 58, 237, 0.4);
+  box-shadow:
+    0 12px 32px rgba(15, 23, 42, 0.06),
+    0 4px 12px rgba(15, 23, 42, 0.04);
+  border-color: rgba(124, 154, 107, 0.45);
 }
 
 /* ── Gradient Text ───────────────────────── */
 .gradient-text {
-  background: linear-gradient(135deg, #7C3AED 0%, #8B5CF6 50%, #A78BFA 100%);
+  background: linear-gradient(135deg, #5C7A4E 0%, #7C9A6B 50%, #A6C091 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -96,7 +106,7 @@ body {
 
 /* ── Focus States ────────────────────────── */
 *:focus-visible {
-  outline: 2px solid #7C3AED;
+  outline: 2px solid #7C9A6B;
   outline-offset: 2px;
   border-radius: 4px;
 }

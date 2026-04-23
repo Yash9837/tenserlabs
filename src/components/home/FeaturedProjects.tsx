@@ -1,133 +1,122 @@
 "use client";
 
-import { SectionWrapper, TechBadge } from "@/components/ui/shared";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 
-const projects = [
+const studies = [
   {
-    title: "ThriveUp",
-    category: "Event Management",
-    description:
-      "A comprehensive event management application enabling seamless event creation, discovery, and attendee management.",
-    tech: ["Next.js", "React", "Node.js", "MongoDB"],
-    link: "https://thriveup-web.vercel.app/",
-    color: "bg-blue-500",
+    title: "ThriveUp — Event Management SaaS",
+    industry: "SaaS",
+    image: "/images/thriveup.png",
+    credit: "©2025 — TenserLabs Studio",
+    href: "https://thriveup-web.vercel.app/",
+    external: true,
   },
   {
-    title: "Tenzi Jeans",
-    category: "E-Commerce / Fashion",
-    description:
-      "Premium wholesale fashion web platform with modern catalog management and order processing systems.",
-    tech: ["Next.js", "Tailwind CSS", "Vercel"],
-    link: "https://www.tenzijeans.com/",
-    color: "bg-emerald-500",
+    title: "Tenzi Jeans — Wholesale Fashion",
+    industry: "E-Commerce",
+    image: "/images/tenzi.png",
+    credit: "©2025 — TenserLabs Studio",
+    href: "https://www.tenzijeans.com/",
+    external: true,
   },
   {
-    title: "LeadFlow CRM",
-    category: "Real Estate / SaaS",
-    description:
-      "An intelligent CRM platform for real estate businesses with lead tracking, analytics, and automated follow-ups.",
-    tech: ["React", "Node.js", "PostgreSQL", "AI"],
-    link: "https://lead-flow-mauve.vercel.app/landing",
-    color: "bg-orange-500",
+    title: "LeadFlow — Real-Estate CRM",
+    industry: "SaaS",
+    image: "/images/leadflow.png",
+    credit: "©2025 — TenserLabs Studio",
+    href: "https://lead-flow-mauve.vercel.app/landing",
+    external: true,
   },
 ];
 
-function ProjectCard({
-  project,
-  index,
-}: {
-  project: (typeof projects)[0];
-  index: number;
-}) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.15 }}
-      className="group relative rounded-xl bg-slate-800/50 border border-slate-700/50 overflow-hidden card-hover-dark"
-    >
-      {/* Project Preview Header */}
-      <div className="h-48 bg-slate-800 relative flex items-center justify-center overflow-hidden">
-        <div className={`absolute top-4 left-4 w-3 h-3 rounded-full ${project.color} opacity-60`} />
-        <span className="text-2xl font-extrabold text-white/10 group-hover:text-white/20 transition-colors">
-          {project.title}
-        </span>
-        <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-          <span className="text-sm font-medium text-accent-light opacity-0 group-hover:opacity-100 transition-opacity delay-100">
-            View Case Study
-          </span>
-        </div>
-      </div>
-
-      <div className="p-6">
-        <div className="text-xs font-medium text-accent-light mb-2 uppercase tracking-wider">
-          {project.category}
-        </div>
-        <h3 className="font-bold text-xl mb-2 text-white group-hover:text-accent-light transition-colors">
-          {project.title}
-        </h3>
-        <p className="text-sm text-slate-400 leading-relaxed mb-4">
-          {project.description}
-        </p>
-
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tech.map((t) => (
-            <span key={t} className="inline-flex items-center px-2.5 py-1 text-xs font-medium bg-slate-700/50 text-slate-300 border border-slate-600/50 rounded-full">
-              {t}
-            </span>
-          ))}
-        </div>
-
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm text-accent-light hover:text-accent transition-colors font-medium"
-        >
-          View Live <ArrowRight size={14} />
-        </a>
-      </div>
-    </motion.div>
-  );
-}
-
 export default function FeaturedProjects() {
   return (
-    <section className="py-20 md:py-28 bg-[#0F172A] relative overflow-hidden">
-      <div className="absolute inset-0 dot-bg-dark" />
-      <div className="relative z-10 max-w-container mx-auto px-6">
+    <section className="py-20 md:py-28 bg-[#FAFAF7]">
+      <div className="max-w-container mx-auto px-6">
         {/* Heading */}
-        <div className="text-center mb-16">
-          <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-light bg-accent/15 rounded-full border border-accent/25 mb-4">
-            Featured Work
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-4">
-            Projects
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="text-sm text-slate-500">Work Showcase</span>
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 leading-[1.15] mb-4">
+            Case Studies
+            <br />
+            &amp; Success Stories
           </h2>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
-            Real products we&apos;ve built — shipped, scaled, and making an impact.
+          <p className="text-slate-600 text-[15px] leading-relaxed">
+            Real products we&apos;ve shipped and scaled. A selection of our most
+            impactful work across SaaS, e-commerce, and rental platforms.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {projects.map((p, i) => (
-            <ProjectCard key={p.title} project={p} index={i} />
-          ))}
+        {/* Case study grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {studies.map((study, i) => {
+            const CardInner = (
+              <>
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-white border border-slate-200">
+                  <Image
+                    src={study.image}
+                    alt={study.title}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 90vw"
+                    className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                  <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider bg-white/90 text-accent-dark rounded-full border border-white/60 backdrop-blur-sm">
+                    {study.industry}
+                  </span>
+                  <span className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 text-slate-900 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ArrowUpRight size={14} />
+                  </span>
+                </div>
+                <div className="mt-4">
+                  <div className="text-[11px] text-slate-500 mb-1">
+                    {study.credit}
+                  </div>
+                  <h3 className="text-base font-semibold text-slate-900 group-hover:text-accent-dark transition-colors leading-snug">
+                    {study.title}
+                  </h3>
+                </div>
+              </>
+            );
+
+            return (
+              <motion.div
+                key={study.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ delay: i * 0.08, duration: 0.5 }}
+                className="group"
+              >
+                {study.external ? (
+                  <a
+                    href={study.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
+                    {CardInner}
+                  </a>
+                ) : (
+                  <Link href={study.href} className="block">
+                    {CardInner}
+                  </Link>
+                )}
+              </motion.div>
+            );
+          })}
         </div>
-        <div className="text-center mt-12">
+
+        <div className="mt-12 text-center">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 px-6 py-3 border border-slate-600 hover:border-accent/50 rounded-lg text-sm font-medium text-slate-300 hover:text-white transition-all hover:bg-white/5"
+            className="inline-flex items-center px-6 py-3 rounded-full bg-accent/20 hover:bg-accent/30 text-accent-dark text-sm font-medium transition-all border border-accent/30"
           >
-            View All Projects <ArrowRight size={14} />
+            View all projects
           </Link>
         </div>
       </div>

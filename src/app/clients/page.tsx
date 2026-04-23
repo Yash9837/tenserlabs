@@ -68,17 +68,17 @@ export default function ClientsPage() {
     <div>
       {/* Hero — Dark */}
       <section className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg-dark" />
+        
         <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px]" />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-light bg-accent/15 rounded-full border border-accent/25 mb-4">
+            <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-dark bg-accent/15 rounded-full border border-accent/25 mb-4">
               Our Clients
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 text-white">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 text-slate-900">
               Trusted by <span className="gradient-text">Innovators</span>
             </h1>
-            <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+            <p className="text-slate-500 text-lg leading-relaxed max-w-2xl mx-auto">
               From ambitious startups to established enterprises — we partner with companies that dare to build differently.
             </p>
           </motion.div>
@@ -96,16 +96,16 @@ export default function ClientsPage() {
               viewport={{ once: true }}
               transition={{ delay: gi * 0.1 }}
             >
-              <h3 className="text-sm text-accent-light font-semibold uppercase tracking-wider mb-4">
+              <h3 className="text-sm text-accent-dark font-semibold uppercase tracking-wider mb-4">
                 {group.industry}
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {group.clients.map((client) => (
                   <div
                     key={client.name}
-                    className="group relative px-6 py-5 rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-accent/30 transition-all card-hover text-center"
+                    className="group relative px-6 py-5 rounded-xl bg-white border border-slate-200 hover:border-accent/30 transition-all card-hover text-center"
                   >
-                    <span className="font-semibold text-slate-300 group-hover:text-accent-light text-base transition-colors">{client.name}</span>
+                    <span className="font-semibold text-slate-700 group-hover:text-accent-dark text-base transition-colors">{client.name}</span>
                     {/* Hover tooltip */}
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-white text-slate-900 text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
                       {client.work}
@@ -129,7 +129,7 @@ export default function ClientsPage() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="px-6 py-3 rounded-full bg-slate-800/50 border border-slate-700/50 text-sm font-medium text-white hover:border-accent/30 hover:text-accent-light transition-all cursor-default"
+              className="px-6 py-3 rounded-full bg-white border border-slate-200 text-sm font-medium text-slate-900 hover:border-accent/30 hover:text-accent-dark transition-all cursor-default"
             >
               {ind}
             </motion.div>

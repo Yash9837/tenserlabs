@@ -67,24 +67,24 @@ function BlogCard({ post, index }: { post: typeof posts[0]; index: number }) {
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.4, delay: index * 0.08 }}
-      className="group p-6 rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-accent/30 transition-all card-hover"
+      className="group p-6 rounded-xl bg-white border border-slate-200 hover:border-accent/30 transition-all card-hover"
     >
       {/* Tags */}
       <div className="flex flex-wrap gap-2 mb-3">
         {post.tags.map((tag) => (
           <span
             key={tag}
-            className="px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider bg-accent/10 text-accent-light rounded-full border border-accent/20"
+            className="px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider bg-accent/10 text-accent-dark rounded-full border border-accent/20"
           >
             {tag}
           </span>
         ))}
       </div>
 
-      <h3 className="font-bold text-lg mb-3 text-white group-hover:text-accent transition-colors leading-tight">
+      <h3 className="font-bold text-lg mb-3 text-slate-900 group-hover:text-accent transition-colors leading-tight">
         {post.title}
       </h3>
-      <p className="text-sm text-slate-400 leading-relaxed mb-4">{post.excerpt}</p>
+      <p className="text-sm text-slate-500 leading-relaxed mb-4">{post.excerpt}</p>
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 text-xs text-slate-500">
@@ -99,7 +99,7 @@ function BlogCard({ post, index }: { post: typeof posts[0]; index: number }) {
         </div>
         <Link
           href={post.slug}
-          className="text-sm text-accent-light hover:text-accent transition-colors font-medium flex items-center gap-1"
+          className="text-sm text-accent-dark hover:text-accent transition-colors font-medium flex items-center gap-1"
         >
           Read
           <ArrowRight size={14} />
@@ -114,17 +114,17 @@ export default function BlogPage() {
     <div>
       {/* Hero — Dark */}
       <section className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg-dark" />
+        
         <div className="absolute bottom-0 left-1/3 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px]" />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-light bg-accent/15 rounded-full border border-accent/25 mb-4">
+            <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-dark bg-accent/15 rounded-full border border-accent/25 mb-4">
               Blog
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 text-white">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 text-slate-900">
               Insights & <span className="gradient-text">Engineering</span>
             </h1>
-            <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+            <p className="text-slate-500 text-lg leading-relaxed max-w-2xl mx-auto">
               Technical deep dives, engineering culture, and lessons learned from building production software.
             </p>
           </motion.div>

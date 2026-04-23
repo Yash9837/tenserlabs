@@ -11,19 +11,21 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        /* Sage-green accent inspired by Truvista */
         accent: {
-          DEFAULT: "#7C3AED",
-          light: "#8B5CF6",
-          dark: "#6D28D9",
-          glow: "rgba(124, 58, 237, 0.2)",
+          DEFAULT: "#7C9A6B",
+          light: "#A6C091",
+          dark: "#5C7A4E",
+          glow: "rgba(124, 154, 107, 0.22)",
         },
+        /* Light surfaces */
         surface: {
-          DEFAULT: "#1E293B",
-          light: "#1E293B",
-          lighter: "#334155",
-          border: "#334155",
+          DEFAULT: "#FFFFFF",
+          light: "#FAFAF7",
+          lighter: "#F3F4EE",
+          border: "#E5E7EB",
         },
-        muted: "#94A3B8",
+        muted: "#64748B",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
@@ -53,8 +55,8 @@ const config: Config = {
           "100%": { transform: "translateX(-50%)" },
         },
         glow: {
-          "0%": { boxShadow: "0 0 5px rgba(124, 58, 237, 0.2)" },
-          "100%": { boxShadow: "0 0 20px rgba(124, 58, 237, 0.4)" },
+          "0%": { boxShadow: "0 0 5px rgba(124, 154, 107, 0.15)" },
+          "100%": { boxShadow: "0 0 20px rgba(124, 154, 107, 0.35)" },
         },
         float: {
           "0%, 100%": { transform: "translateY(0)" },

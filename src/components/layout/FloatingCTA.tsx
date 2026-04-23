@@ -14,7 +14,7 @@ export default function FloatingCTA() {
     >
       <Link
         href="/contact"
-        className="group flex items-center gap-2 px-5 py-3 bg-accent hover:bg-accent-dark text-white text-sm font-medium rounded-full shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/30 transition-all animate-pulse-soft"
+        className="group flex items-center gap-2 px-5 py-3 bg-accent hover:bg-accent-dark text-white text-sm font-medium rounded-full shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/35 transition-all animate-pulse-soft"
       >
         <MessageSquare size={16} />
         <span className="hidden sm:inline">Book a Call</span>

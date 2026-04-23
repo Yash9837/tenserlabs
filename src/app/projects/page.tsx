@@ -1,145 +1,238 @@
 "use client";
 
 import { useState } from "react";
-import { SectionWrapper, TechBadge } from "@/components/ui/shared";
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { useRef } from "react";
-import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import PageHero from "@/components/ui/PageHero";
 
-const industries = ["All", "FinTech", "HealthTech", "Logistics", "EdTech", "E-Commerce", "SaaS", "Rental"];
+const industries = [
+  "All",
+  "SaaS",
+  "E-Commerce",
+  "Rental",
+  "FinTech",
+  "HealthTech",
+  "Logistics",
+  "EdTech",
+];
 
-const projects = [
+type Project = {
+  title: string;
+  industry: string;
+  description: string;
+  challenge: string;
+  results: string;
+  tech: string[];
+  link: string;
+  image: string;
+  live: boolean;
+};
+
+const projects: Project[] = [
   {
     title: "ThriveUp",
     industry: "SaaS",
-    description: "A comprehensive event management application enabling seamless event creation, discovery, and attendee management with real-time updates.",
-    challenge: "Create a unified platform that handles event lifecycle from creation to post-event analytics.",
+    description:
+      "A comprehensive event management application enabling seamless event creation, discovery, and attendee management with real-time updates.",
+    challenge:
+      "Create a unified platform that handles event lifecycle from creation to post-event analytics.",
     results: "Processed 5,000+ events with 99.9% uptime in the first year.",
     tech: ["Next.js", "React", "Node.js", "MongoDB", "WebSockets"],
     link: "https://thriveup-web.vercel.app/",
-    color: "bg-blue-500",
+    image: "/images/thriveup.png",
+    live: true,
   },
   {
     title: "Tenzi Jeans",
     industry: "E-Commerce",
-    description: "Premium wholesale fashion web platform with modern catalog management and B2B order processing systems.",
-    challenge: "Digitize a traditional wholesale fashion business with a modern, mobile-first web presence.",
-    results: "3x increase in wholesale inquiries and 60% reduction in order processing time.",
+    description:
+      "Premium wholesale fashion web platform with modern catalog management and B2B order processing systems.",
+    challenge:
+      "Digitize a traditional wholesale fashion business with a modern, mobile-first web presence.",
+    results:
+      "3× increase in wholesale inquiries and 60% reduction in order processing time.",
     tech: ["Next.js", "Tailwind CSS", "Vercel", "CMS"],
     link: "https://www.tenzijeans.com/",
-    color: "bg-emerald-500",
+    image: "/images/tenzi.png",
+    live: true,
   },
   {
     title: "LeadFlow CRM",
     industry: "SaaS",
-    description: "An intelligent CRM platform for real estate businesses with lead tracking, AI-powered analytics, and automated follow-ups.",
-    challenge: "Build a specialized CRM that understands real estate workflows and automates lead nurturing.",
+    description:
+      "An intelligent CRM platform for real estate businesses with lead tracking, AI-powered analytics, and automated follow-ups.",
+    challenge:
+      "Build a specialized CRM that understands real estate workflows and automates lead nurturing.",
     results: "40% improvement in lead conversion rates for early adopters.",
     tech: ["React", "Node.js", "PostgreSQL", "AI/ML", "Redis"],
     link: "https://lead-flow-mauve.vercel.app/landing",
-    color: "bg-orange-500",
+    image: "/images/leadflow.png",
+    live: true,
   },
   {
     title: "CamRX",
     industry: "Rental",
-    description: "Camera and equipment rental application with seamless booking, inventory management, and integrated payments.",
-    challenge: "Create a frictionless rental experience for camera equipment with complex availability management.",
-    results: "Reduced booking friction by 70% and doubled monthly rental revenue.",
+    description:
+      "Camera and equipment rental application with seamless booking, inventory management, and integrated payments.",
+    challenge:
+      "Create a frictionless rental experience for camera equipment with complex availability management.",
+    results:
+      "Reduced booking friction by 70% and doubled monthly rental revenue.",
     tech: ["Next.js", "Stripe", "Firebase", "Tailwind CSS"],
     link: "https://camrx.vercel.app/",
-    color: "bg-pink-500",
+    image:
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&h=700&fit=crop",
+    live: true,
   },
   {
     title: "NovaPay Gateway",
     industry: "FinTech",
-    description: "Real-time payment gateway processing thousands of transactions per second with multi-currency support and fraud detection.",
-    challenge: "Build a payment system that handles high-throughput transactions with sub-100ms latency.",
+    description:
+      "Real-time payment gateway processing thousands of transactions per second with multi-currency support and fraud detection.",
+    challenge:
+      "Build a payment system that handles high-throughput transactions with sub-100ms latency.",
     results: "Processing 10,000+ TPS with 99.99% uptime and $0 fraud losses.",
     tech: ["Node.js", "Kafka", "PostgreSQL", "AWS", "Docker"],
     link: "#",
-    color: "bg-amber-500",
+    image:
+      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=900&h=700&fit=crop",
+    live: false,
   },
   {
     title: "MedSync Platform",
     industry: "HealthTech",
-    description: "HIPAA-compliant patient management platform with telemedicine, EHR integration, and appointment scheduling.",
-    challenge: "Create a healthcare platform that unifies patient records, scheduling, and telemedicine while maintaining HIPAA compliance.",
+    description:
+      "HIPAA-compliant patient management platform with telemedicine, EHR integration, and appointment scheduling.",
+    challenge:
+      "Unify patient records, scheduling, and telemedicine while maintaining HIPAA compliance.",
     results: "Reduced administrative overhead by 50% across 12 clinics.",
     tech: ["React", "Python", "FastAPI", "GCP", "PostgreSQL"],
     link: "#",
-    color: "bg-teal-500",
+    image:
+      "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=900&h=700&fit=crop",
+    live: false,
   },
   {
     title: "ShipTrack Dashboard",
     industry: "Logistics",
-    description: "Real-time fleet tracking dashboard with route optimization, driver analytics, and predictive maintenance alerts.",
-    challenge: "Provide fleet managers with real-time visibility into vehicle locations, driver behavior, and maintenance needs.",
+    description:
+      "Real-time fleet tracking dashboard with route optimization, driver analytics, and predictive maintenance alerts.",
+    challenge:
+      "Real-time visibility into vehicle locations, driver behavior, and maintenance needs.",
     results: "20% reduction in fuel costs and 35% decrease in vehicle downtime.",
     tech: ["Next.js", "Go", "Redis", "Mapbox", "WebSockets"],
     link: "#",
-    color: "bg-indigo-500",
+    image:
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=900&h=700&fit=crop",
+    live: false,
   },
   {
     title: "LearnUp AI Tutor",
     industry: "EdTech",
-    description: "AI-powered tutoring app with adaptive learning paths, real-time progress tracking, and personalized content recommendations.",
-    challenge: "Create an engaging, AI-driven learning experience that adapts to each student's pace and style.",
-    results: "60% improvement in student engagement and 45% faster learning outcomes.",
+    description:
+      "AI-powered tutoring app with adaptive learning paths, real-time progress tracking, and personalized content recommendations.",
+    challenge:
+      "Engaging, AI-driven learning experience that adapts to each student's pace and style.",
+    results:
+      "60% improvement in student engagement and 45% faster learning outcomes.",
     tech: ["React Native", "OpenAI API", "Firebase", "Python"],
     link: "#",
-    color: "bg-rose-500",
+    image:
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&h=700&fit=crop",
+    live: false,
   },
 ];
 
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-30px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.08 }}
-      className="group rounded-xl bg-slate-800/50 border border-slate-700/50 overflow-hidden card-hover"
-    >
-      <div className="h-44 bg-slate-800 relative flex items-center justify-center overflow-hidden">
-        <div className={`absolute top-4 left-4 w-3 h-3 rounded-full ${project.color} opacity-60`} />
-        <span className="text-xl font-extrabold text-white/10 group-hover:text-white/20 transition-colors">
-          {project.title}
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const CardBody = (
+    <>
+      <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-white border border-slate-200">
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 90vw"
+          className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+        />
+        <span className="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider bg-white/95 text-accent-dark rounded-full border border-white/60">
+          {project.industry}
         </span>
+        {project.live && (
+          <span className="absolute top-3 right-3 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100">
+            Live
+          </span>
+        )}
       </div>
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-xs font-medium text-accent-light uppercase tracking-wider">{project.industry}</span>
-        </div>
-        <h3 className="font-bold text-xl text-white mb-2 group-hover:text-accent transition-colors">{project.title}</h3>
-        <p className="text-sm text-slate-400 leading-relaxed mb-4">{project.description}</p>
+
+      <div className="pt-5 pb-2">
+        <h3 className="text-xl font-semibold text-slate-900 group-hover:text-accent-dark transition-colors mb-2">
+          {project.title}
+        </h3>
+        <p className="text-sm text-slate-600 leading-relaxed mb-4">
+          {project.description}
+        </p>
 
         <div className="space-y-2 mb-4">
-          <div className="text-xs font-medium text-accent-light">Challenge:</div>
-          <p className="text-xs text-slate-400">{project.challenge}</p>
-          <div className="text-xs font-medium text-accent-light">Results:</div>
-          <p className="text-xs text-slate-400">{project.results}</p>
+          <div>
+            <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-slate-500">
+              Challenge
+            </span>
+            <p className="text-sm text-slate-700 leading-relaxed mt-0.5">
+              {project.challenge}
+            </p>
+          </div>
+          <div>
+            <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-slate-500">
+              Result
+            </span>
+            <p className="text-sm text-slate-700 leading-relaxed mt-0.5">
+              {project.results}
+            </p>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-1.5 mb-4">
           {project.tech.map((t) => (
-            <TechBadge key={t} name={t} />
+            <span
+              key={t}
+              className="inline-flex items-center px-2.5 py-0.5 text-[11px] font-medium text-slate-600 bg-[#F3F4EE] rounded-full border border-slate-200"
+            >
+              {t}
+            </span>
           ))}
         </div>
 
-        {project.link !== "#" && (
-          <a
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-accent hover:text-accent-dark transition-colors font-medium"
-          >
-            View Live <ArrowRight size={14} />
-          </a>
+        {project.live && (
+          <div className="inline-flex items-center gap-1.5 text-sm text-accent-dark font-medium group-hover:gap-2.5 transition-all">
+            View live
+            <ArrowUpRight size={14} strokeWidth={2.4} />
+          </div>
         )}
       </div>
+    </>
+  );
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-30px" }}
+      transition={{ duration: 0.45, delay: (index % 6) * 0.06 }}
+      className="group"
+    >
+      {project.live ? (
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block"
+        >
+          {CardBody}
+        </a>
+      ) : (
+        <div>{CardBody}</div>
+      )}
     </motion.div>
   );
 }
@@ -147,66 +240,75 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 export default function ProjectsPage() {
   const [activeFilter, setActiveFilter] = useState("All");
 
-  const filtered = activeFilter === "All"
-    ? projects
-    : projects.filter((p) => p.industry === activeFilter);
+  const filtered =
+    activeFilter === "All"
+      ? projects
+      : projects.filter((p) => p.industry === activeFilter);
 
   return (
-    <div>
+    <div className="bg-[#FAFAF7]">
       {/* Hero */}
-      <section className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg-dark" />
-        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px]" />
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-light bg-accent/15 rounded-full border border-accent/25 mb-4">
-              Portfolio
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 text-white">
-              Our <span className="gradient-text">Projects</span>
-            </h1>
-            <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
-              Real products we&apos;ve built — shipped, scaled, and making an impact across industries.
-            </p>
-          </motion.div>
+      <PageHero
+        label="Portfolio"
+        title={
+          <>
+            Our
+            <br />
+            Projects
+          </>
+        }
+        description="Real products we've built — shipped, scaled, and making an impact across industries. Every project here is designed, engineered, and owned by our team."
+      />
+
+      {/* Filter pills */}
+      <section className="pb-10">
+        <div className="max-w-container mx-auto px-6">
+          <div className="flex flex-wrap gap-2">
+            {industries.map((ind) => {
+              const active = activeFilter === ind;
+              return (
+                <button
+                  key={ind}
+                  onClick={() => setActiveFilter(ind)}
+                  className={`px-5 py-2 text-sm font-medium rounded-full border transition-all ${
+                    active
+                      ? "bg-accent border-accent text-white shadow-sm"
+                      : "bg-white border-slate-200 text-slate-700 hover:border-accent/50 hover:text-accent-dark"
+                  }`}
+                >
+                  {ind}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* Filters */}
-      <div className="max-w-container mx-auto px-6 mb-12">
-        <div className="flex flex-wrap justify-center gap-2">
-          {industries.map((ind) => (
-            <button
-              key={ind}
-              onClick={() => setActiveFilter(ind)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-                activeFilter === ind
-                  ? "bg-accent text-white shadow-sm"
-                  : "bg-slate-800/50 text-slate-400 border border-slate-700/50 hover:border-accent/30"
-              }`}
+      {/* Projects grid */}
+      <section className="pb-24 md:pb-32">
+        <div className="max-w-container mx-auto px-6">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeFilter}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12"
             >
-              {ind}
-            </button>
-          ))}
-        </div>
-      </div>
+              {filtered.map((p, i) => (
+                <ProjectCard key={p.title} project={p} index={i} />
+              ))}
+            </motion.div>
+          </AnimatePresence>
 
-      {/* Projects Grid */}
-      <SectionWrapper className="max-w-container mx-auto px-6 !pt-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeFilter}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {filtered.map((p, i) => (
-              <ProjectCard key={p.title} project={p} index={i} />
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </SectionWrapper>
+          {filtered.length === 0 && (
+            <div className="text-center py-20 text-slate-500">
+              No projects in this category yet — check back soon.
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

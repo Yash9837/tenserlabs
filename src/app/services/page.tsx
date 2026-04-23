@@ -1,9 +1,9 @@
 "use client";
 
-import { SectionWrapper, SectionHeading, TechBadge } from "@/components/ui/shared";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe,
   Smartphone,
@@ -13,348 +13,246 @@ import {
   Palette,
   Search,
   Users,
-  ArrowRight,
-  Check,
+  ArrowUpRight,
+  ChevronDown,
+  Plus,
 } from "lucide-react";
+import PageHero from "@/components/ui/PageHero";
 
-/* =============== DEVICE MOCKUPS =============== */
-
-function BrowserMockup() {
-  return (
-    <div className="rounded-xl border border-slate-700/80 bg-slate-900/90 shadow-2xl shadow-black/30 overflow-hidden">
-      {/* Chrome */}
-      <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/80 border-b border-slate-700/60">
-        <div className="flex gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-          <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-          <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-        </div>
-        <div className="flex-1 ml-3 px-3 py-1 rounded-md bg-slate-900/60 text-[10px] text-slate-500 font-mono">
-          https://your-app.com
-        </div>
-      </div>
-      {/* UI Content */}
-      <div className="p-4 space-y-3">
-        {/* Nav */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-accent/30" />
-            <div className="w-16 h-2 rounded bg-slate-700" />
-          </div>
-          <div className="flex gap-3">
-            <div className="w-8 h-1.5 rounded bg-slate-700/60" />
-            <div className="w-8 h-1.5 rounded bg-slate-700/60" />
-            <div className="w-12 h-5 rounded bg-accent/40 flex items-center justify-center">
-              <span className="text-[7px] text-white/70 font-medium">Sign Up</span>
-            </div>
-          </div>
-        </div>
-        {/* Hero area */}
-        <div className="h-20 rounded-lg bg-gradient-to-r from-accent/15 via-violet-500/10 to-accent/5 border border-slate-700/40 p-3 flex items-center">
-          <div className="space-y-1.5">
-            <div className="w-28 h-2.5 rounded bg-white/15" />
-            <div className="w-20 h-1.5 rounded bg-slate-600/40" />
-            <div className="w-14 h-4 rounded bg-accent/30 mt-1" />
-          </div>
-        </div>
-        {/* Cards */}
-        <div className="grid grid-cols-3 gap-2">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-16 rounded-lg bg-slate-800/70 border border-slate-700/30 p-2 space-y-1.5">
-              <div className={`w-5 h-5 rounded ${i === 1 ? "bg-accent/25" : i === 2 ? "bg-emerald-500/20" : "bg-amber-500/20"}`} />
-              <div className="w-full h-1.5 rounded bg-slate-700/50" />
-              <div className="w-2/3 h-1 rounded bg-slate-700/30" />
-            </div>
-          ))}
-        </div>
-        {/* Table */}
-        <div className="space-y-1.5">
-          {[1, 2].map((i) => (
-            <div key={i} className="flex items-center justify-between px-2 py-1.5 rounded bg-slate-800/40">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-slate-700" />
-                <div className="w-16 h-1.5 rounded bg-slate-700/60" />
-              </div>
-              <div className="w-10 h-1.5 rounded bg-emerald-500/30" />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PhoneMockup() {
-  return (
-    <div className="w-[200px] mx-auto rounded-[28px] border-2 border-slate-700/80 bg-slate-900/95 shadow-2xl shadow-black/40 overflow-hidden">
-      {/* Notch */}
-      <div className="flex justify-center pt-2 pb-1">
-        <div className="w-20 h-5 rounded-full bg-slate-800 border border-slate-700/60" />
-      </div>
-      {/* Screen */}
-      <div className="px-3 pb-4 space-y-2.5">
-        {/* Status bar */}
-        <div className="flex justify-between items-center px-1 pb-1">
-          <span className="text-[8px] text-slate-500 font-mono">9:41</span>
-          <div className="flex gap-1">
-            <div className="w-3 h-1.5 rounded-sm bg-slate-600" />
-            <div className="w-2 h-1.5 rounded-sm bg-slate-600" />
-            <div className="w-4 h-2 rounded-sm bg-slate-600" />
-          </div>
-        </div>
-        {/* Header */}
-        <div className="flex items-center justify-between px-1">
-          <span className="text-[10px] font-bold text-white/80">Home</span>
-          <div className="w-5 h-5 rounded-full bg-accent/20 border border-accent/30" />
-        </div>
-        {/* Welcome card */}
-        <div className="rounded-xl bg-gradient-to-br from-accent/20 to-violet-600/15 border border-slate-700/40 p-2.5">
-          <div className="w-16 h-1.5 rounded bg-white/20 mb-1" />
-          <div className="w-24 h-1 rounded bg-white/10" />
-          {/* Mini chart */}
-          <svg viewBox="0 0 120 35" className="w-full mt-2">
-            <path
-              d="M0,30 Q20,25 30,20 T60,12 T90,18 T120,5"
-              fill="none"
-              stroke="rgba(139,92,246,0.5)"
-              strokeWidth="2"
-            />
-            <path
-              d="M0,30 Q20,25 30,20 T60,12 T90,18 T120,5 L120,35 L0,35 Z"
-              fill="rgba(139,92,246,0.08)"
-            />
-          </svg>
-        </div>
-        {/* List items */}
-        {[
-          { color: "bg-accent/20", w: "w-full" },
-          { color: "bg-emerald-500/15", w: "w-4/5" },
-          { color: "bg-amber-500/15", w: "w-3/4" },
-        ].map((item, i) => (
-          <div key={i} className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-800/60 border border-slate-700/30">
-            <div className={`w-8 h-8 rounded-lg ${item.color} flex-shrink-0`} />
-            <div className="flex-1 space-y-1">
-              <div className={`${item.w} h-1.5 rounded bg-slate-700/60`} />
-              <div className="w-2/3 h-1 rounded bg-slate-700/30" />
-            </div>
-            <div className="w-2 h-2 rounded-full bg-accent/30" />
-          </div>
-        ))}
-        {/* Bottom nav */}
-        <div className="flex justify-around pt-2 border-t border-slate-700/30">
-          {[true, false, false, false].map((active, i) => (
-            <div key={i} className="flex flex-col items-center gap-0.5">
-              <div className={`w-4 h-4 rounded-full ${active ? "bg-accent/50" : "bg-slate-700/50"}`} />
-              <div className={`w-1 h-1 rounded-full ${active ? "bg-accent" : "opacity-0"}`} />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function CodeWindowMockup() {
-  return (
-    <div className="rounded-xl border border-slate-700/80 bg-slate-900/90 shadow-2xl shadow-black/30 overflow-hidden">
-      {/* Title bar */}
-      <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/80 border-b border-slate-700/60">
-        <div className="flex gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-          <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-          <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-        </div>
-        <div className="flex ml-3 gap-0.5">
-          <div className="px-3 py-1 rounded-t bg-slate-900/80 text-[9px] text-slate-400 font-mono border-b-2 border-accent/50">
-            app.service.ts
-          </div>
-          <div className="px-3 py-1 rounded-t bg-slate-800/40 text-[9px] text-slate-600 font-mono">
-            config.ts
-          </div>
-        </div>
-      </div>
-      {/* Code */}
-      <div className="flex">
-        {/* Line numbers */}
-        <div className="py-3 px-2 text-right text-[10px] font-mono text-slate-700 leading-[1.8] select-none border-r border-slate-800">
-          {Array.from({ length: 12 }, (_, i) => (
-            <div key={i}>{i + 1}</div>
-          ))}
-        </div>
-        {/* Code content */}
-        <div className="p-3 font-mono text-[10px] leading-[1.8] flex-1 overflow-hidden">
-          <div><span className="text-violet-400">import</span> <span className="text-slate-500">{"{"}</span> <span className="text-emerald-400">createApp</span> <span className="text-slate-500">{"}"}</span> <span className="text-violet-400">from</span> <span className="text-amber-300">&apos;@tenserlabs/core&apos;</span></div>
-          <div><span className="text-violet-400">import</span> <span className="text-slate-500">{"{"}</span> <span className="text-emerald-400">database</span><span className="text-slate-500">,</span> <span className="text-emerald-400">cache</span> <span className="text-slate-500">{"}"}</span> <span className="text-violet-400">from</span> <span className="text-amber-300">&apos;./config&apos;</span></div>
-          <div className="text-slate-700">&nbsp;</div>
-          <div><span className="text-violet-400">const</span> <span className="text-slate-300">app</span> <span className="text-slate-500">=</span> <span className="text-emerald-400">createApp</span><span className="text-slate-500">({"{"}</span></div>
-          <div className="pl-4"><span className="text-slate-300">name</span><span className="text-slate-500">:</span> <span className="text-amber-300">&apos;production-api&apos;</span><span className="text-slate-500">,</span></div>
-          <div className="pl-4"><span className="text-slate-300">database</span><span className="text-slate-500">,</span></div>
-          <div className="pl-4"><span className="text-slate-300">cache</span><span className="text-slate-500">,</span></div>
-          <div className="pl-4"><span className="text-slate-300">scaling</span><span className="text-slate-500">:</span> <span className="text-amber-300">&apos;auto&apos;</span><span className="text-slate-500">,</span></div>
-          <div><span className="text-slate-500">{"}"})</span></div>
-          <div className="text-slate-700">&nbsp;</div>
-          <div><span className="text-violet-400">await</span> <span className="text-slate-300">app</span><span className="text-slate-500">.</span><span className="text-emerald-400">deploy</span><span className="text-slate-500">()</span></div>
-          <div className="flex items-center gap-1.5 mt-0.5"><span className="text-emerald-400">✓</span> <span className="text-emerald-400/70">Build successful — 0 errors</span></div>
-        </div>
-      </div>
-      {/* Terminal bar */}
-      <div className="px-4 py-2 bg-slate-800/50 border-t border-slate-700/40 font-mono text-[9px] text-slate-500 flex items-center gap-2">
-        <span className="text-emerald-400">$</span>
-        <span>npm run deploy — production</span>
-        <span className="ml-auto px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 text-[8px]">READY</span>
-      </div>
-    </div>
-  );
-}
-
-/* =============== MAIN SERVICE CARDS =============== */
+/* =============== CORE SERVICES =============== */
 
 const coreServices = [
   {
     icon: Globe,
+    label: "01 — Web",
     title: "Web Applications",
-    subtitle: "Your business, online",
     description:
-      "Beautiful, fast websites and web apps that look great on every device. Whether it's a landing page, a customer dashboard, or a full platform — we build it to help you grow.",
-    tech: ["React", "Next.js", "Angular", "TypeScript", "Tailwind CSS", "Node.js"],
-    features: [
-      "Works perfectly on phones, tablets & desktops",
-      "Lightning-fast load times",
-      "Real-time updates & live features",
-      "Built to rank well on Google",
+      "Fast, responsive websites and web apps built with modern frameworks. Landing pages, SaaS dashboards, marketplaces — we build them all to convert, scale, and feel premium.",
+    highlights: [
+      "Pixel-perfect on phone, tablet & desktop",
+      "Sub-second load times, SEO-ready",
+      "Real-time features with WebSockets",
+      "Accessible by default",
     ],
-    mockup: "browser",
+    tech: ["React", "Next.js", "TypeScript", "Tailwind", "Node.js"],
+    image:
+      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&h=700&fit=crop",
   },
   {
     icon: Smartphone,
-    title: "Mobile Apps",
-    subtitle: "In your customers' pockets",
+    label: "02 — Mobile",
+    title: "Mobile Applications",
     description:
-      "iOS and Android apps your customers will love using every day. Smooth animations, intuitive navigation, and a native feel — without building two separate apps.",
-    tech: ["React Native", "Flutter", "iOS", "Android", "Firebase", "Expo"],
-    features: [
-      "One app for both iPhone & Android",
-      "Smooth, native-feeling experience",
-      "Works offline when needed",
-      "Push notifications to keep users engaged",
+      "iOS and Android apps that feel native, ship from one codebase, and get loved in the reviews. From consumer apps to internal tools, we handle the full lifecycle.",
+    highlights: [
+      "Native-feel on iOS and Android",
+      "Shared codebase — ship twice as fast",
+      "Offline-first with background sync",
+      "Push notifications and analytics baked in",
     ],
-    mockup: "phone",
+    tech: ["React Native", "Flutter", "Expo", "Firebase", "Swift"],
+    image:
+      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=900&h=700&fit=crop",
   },
   {
     icon: Code2,
+    label: "03 — Custom",
     title: "Custom Software",
-    subtitle: "Built around your workflow",
     description:
-      "Tailored systems that automate your processes, connect your tools, and handle growth. From internal tools to complex platforms — we build exactly what your business needs.",
-    tech: ["Node.js", "Python", "Go", "PostgreSQL", "Redis", "Kafka"],
-    features: [
-      "Automate repetitive tasks & save time",
-      "Connect all your existing tools together",
-      "Handle thousands of users without breaking",
-      "Scales as your business grows",
+      "Purpose-built systems for your exact workflow — internal tools, APIs, integrations, automation, AI pipelines. We talk to your team, map the domain, and ship.",
+    highlights: [
+      "Automations that save real hours",
+      "Seamless integrations between every tool",
+      "Handles production-grade load",
+      "Scales as your business scales",
     ],
-    mockup: "code",
+    tech: ["Node.js", "Python", "Go", "PostgreSQL", "Redis", "Kafka"],
+    image:
+      "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=900&h=700&fit=crop",
   },
 ];
+
+/* =============== SECONDARY SERVICES =============== */
 
 const otherServices = [
   {
     icon: Cloud,
     title: "Cloud & DevOps",
-    description: "Reliable infrastructure that keeps your product fast, secure, and always online.",
-    tech: ["AWS", "GCP", "Kubernetes", "Terraform"],
+    description:
+      "Reliable infrastructure that keeps your product fast, secure, and always online.",
+    tags: ["AWS", "GCP", "Kubernetes", "Terraform"],
   },
   {
     icon: Brain,
     title: "AI / ML Solutions",
-    description: "Smart features that learn from your data — chatbots, recommendations, predictions, and more.",
-    tech: ["Python", "PyTorch", "OpenAI", "LangChain"],
+    description:
+      "Smart features that learn from your data — chatbots, recommendations, predictions.",
+    tags: ["Python", "PyTorch", "OpenAI", "LangChain"],
   },
   {
     icon: Palette,
-    title: "UI/UX Design",
-    description: "Interfaces your users actually enjoy using — intuitive, clean, and designed to convert.",
-    tech: ["Figma", "Framer", "Storybook"],
+    title: "UI / UX Design",
+    description:
+      "Interfaces your users enjoy — intuitive, clean, and designed to convert.",
+    tags: ["Figma", "Framer", "Storybook"],
   },
   {
     icon: Search,
     title: "Technical Consulting",
-    description: "Expert advice on your tech stack, performance bottlenecks, and security — before problems happen.",
-    tech: ["Architecture", "Performance", "Security"],
+    description:
+      "Expert advice on your stack, performance bottlenecks, and security — before problems appear.",
+    tags: ["Architecture", "Performance", "Security"],
   },
   {
     icon: Users,
     title: "Dedicated Teams",
-    description: "Experienced developers who join your team and hit the ground running — no hiring headaches.",
-    tech: ["Full-Stack", "Backend", "Frontend", "DevOps"],
+    description:
+      "Senior engineers who embed with your team and hit the ground running.",
+    tags: ["Full-Stack", "Backend", "Frontend", "DevOps"],
+  },
+  {
+    icon: Code2,
+    title: "MVP Sprint",
+    description:
+      "Four weeks from idea to live MVP — for founders who need to move yesterday.",
+    tags: ["Strategy", "Design", "Build", "Ship"],
   },
 ];
 
-function CoreServiceCard({
+/* =============== PROCESS =============== */
+
+const process = [
+  {
+    step: "01",
+    title: "Discover",
+    body:
+      "We sit with your team, map the problem, the users, and the constraints. You walk away with a scoped brief and a clear shape of the work.",
+  },
+  {
+    step: "02",
+    title: "Design",
+    body:
+      "UX flows, wireframes, and a high-fidelity prototype. Everything is clickable, reviewable, and signed off before a single line of production code is written.",
+  },
+  {
+    step: "03",
+    title: "Build",
+    body:
+      "Two-week sprints with live demos every Friday. You see progress, we collect feedback, and the product shapes itself in public.",
+  },
+  {
+    step: "04",
+    title: "Ship",
+    body:
+      "CI/CD, staging, production. We harden, monitor, document, and hand over — or stick around as a long-term engineering partner.",
+  },
+];
+
+/* =============== FAQ =============== */
+
+const faqs = [
+  {
+    q: "How long does a typical project take?",
+    a: "An MVP sprint ships in 4 weeks. Full products typically run 8–16 weeks. We'll scope the timeline in discovery and commit to milestones you can count on.",
+  },
+  {
+    q: "Do you work with startups or only enterprises?",
+    a: "Both. About 60% of our clients are seed-to-Series-B startups and 40% are enterprise teams augmenting internal engineering. We tune the engagement to the stage.",
+  },
+  {
+    q: "Can you take over an existing codebase?",
+    a: "Yes. We do an audit first (1–2 weeks), document the architecture, flag risks, and propose a stabilization plan before shipping new features.",
+  },
+  {
+    q: "What does pricing look like?",
+    a: "Fixed-scope projects for well-defined work, monthly retainers for ongoing product teams. We share a precise quote after the discovery call — no estimates that balloon.",
+  },
+];
+
+/* =============== COMPONENTS =============== */
+
+function CoreServiceRow({
   service,
   index,
 }: {
   service: (typeof coreServices)[0];
   index: number;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
   const isReversed = index % 2 !== 0;
+  const Icon = service.icon;
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: 0.1 }}
-      className="group"
+    <motion.article
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6 }}
+      className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center"
     >
-      <div className={`grid lg:grid-cols-2 gap-8 lg:gap-12 items-center ${isReversed ? "lg:[direction:rtl]" : ""}`}>
-        {/* Mockup */}
-        <div className={`${isReversed ? "lg:[direction:ltr]" : ""}`}>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            {service.mockup === "browser" && <BrowserMockup />}
-            {service.mockup === "phone" && <PhoneMockup />}
-            {service.mockup === "code" && <CodeWindowMockup />}
-          </motion.div>
-        </div>
-
-        {/* Content */}
-        <div className={`${isReversed ? "lg:[direction:ltr]" : ""}`}>
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/20 mb-4">
-            <service.icon size={16} className="text-accent-light" />
-            <span className="text-xs font-semibold text-accent-light uppercase tracking-wider">{service.subtitle}</span>
-          </div>
-
-          <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-4">
-            {service.title}
-          </h3>
-
-          <p className="text-slate-400 leading-relaxed mb-6">{service.description}</p>
-
-          <ul className="space-y-2.5 mb-6">
-            {service.features.map((f) => (
-              <li key={f} className="flex items-center gap-3 text-sm text-slate-300">
-                <span className="w-5 h-5 rounded-full bg-accent/15 flex items-center justify-center flex-shrink-0">
-                  <Check size={12} className="text-accent-light" />
-                </span>
-                {f}
-              </li>
-            ))}
-          </ul>
-
-          <div className="flex flex-wrap gap-2">
-            {service.tech.map((t) => (
-              <TechBadge key={t} name={t} />
-            ))}
+      {/* Image */}
+      <div className={`${isReversed ? "lg:order-2" : ""}`}>
+        <div className="relative aspect-[5/4] rounded-2xl overflow-hidden bg-accent/15 border border-slate-200">
+          <Image
+            src={service.image}
+            alt={service.title}
+            fill
+            sizes="(min-width: 1024px) 50vw, 90vw"
+            className="object-cover"
+          />
+          <div className="absolute bottom-4 left-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/95 border border-white/60 backdrop-blur-sm shadow-sm">
+            <Icon size={14} className="text-accent-dark" />
+            <span className="text-xs font-medium text-slate-900">
+              {service.label}
+            </span>
           </div>
         </div>
       </div>
-    </motion.div>
+
+      {/* Content */}
+      <div className={`${isReversed ? "lg:order-1" : ""}`}>
+        <h3 className="text-3xl md:text-4xl font-semibold tracking-tight text-slate-900 leading-[1.15] mb-5">
+          {service.title}
+        </h3>
+        <p className="text-slate-600 text-[15px] leading-relaxed mb-8">
+          {service.description}
+        </p>
+
+        <ul className="space-y-3 mb-8">
+          {service.highlights.map((h) => (
+            <li
+              key={h}
+              className="flex items-start gap-3 text-sm text-slate-700"
+            >
+              <span className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent-dark" />
+              </span>
+              {h}
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex flex-wrap gap-2 mb-8">
+          {service.tech.map((t) => (
+            <span
+              key={t}
+              className="inline-flex items-center px-3 py-1 text-xs font-medium text-slate-700 bg-[#F3F4EE] rounded-full border border-slate-200"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+
+        <Link
+          href="/contact"
+          className="group inline-flex items-center gap-2 pl-2 pr-5 py-2 rounded-full border border-slate-300 hover:border-accent/60 text-slate-900 text-sm font-medium transition-colors"
+        >
+          <span className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center group-hover:bg-accent-dark transition-colors">
+            <ArrowUpRight size={14} strokeWidth={2.4} />
+          </span>
+          Start a {service.title.split(" ")[0].toLowerCase()} project
+        </Link>
+      </div>
+    </motion.article>
   );
 }
 
@@ -365,30 +263,85 @@ function SmallServiceCard({
   service: (typeof otherServices)[0];
   index: number;
 }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-30px" });
-
+  const Icon = service.icon;
   return (
     <motion.div
-      ref={ref}
       initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.08 }}
-      className="group p-6 rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-accent/30 transition-all card-hover"
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ delay: index * 0.06, duration: 0.4 }}
+      className="group rounded-2xl bg-white border border-slate-200 p-7 hover:border-accent/40 hover:shadow-lg hover:shadow-slate-900/5 transition-all"
     >
-      <div className="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
-        <service.icon size={20} className="text-accent-light" />
+      <div className="flex items-start justify-between mb-6">
+        <div className="w-11 h-11 rounded-full bg-accent/20 flex items-center justify-center">
+          <Icon size={18} className="text-accent-dark" />
+        </div>
+        <span className="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-accent group-hover:text-white transition-colors">
+          <Plus size={14} />
+        </span>
       </div>
-      <h4 className="font-bold text-lg text-white mb-2 group-hover:text-accent-light transition-colors">
+      <h4 className="font-semibold text-lg text-slate-900 mb-2">
         {service.title}
       </h4>
-      <p className="text-sm text-slate-400 leading-relaxed mb-4">{service.description}</p>
+      <p className="text-sm text-slate-600 leading-relaxed mb-5">
+        {service.description}
+      </p>
       <div className="flex flex-wrap gap-1.5">
-        {service.tech.map((t) => (
-          <TechBadge key={t} name={t} />
-        ))}
+        {service.tags.map((t) => (
+          <span
+            key={t}
+            className="text-[11px] font-medium text-slate-500 tracking-wide"
+          >
+            {t}
+          </span>
+        )).reduce<React.ReactNode[]>((acc, el, i) => {
+          if (i > 0) acc.push(<span key={`dot-${i}`} className="text-slate-300">·</span>);
+          acc.push(el);
+          return acc;
+        }, [])}
       </div>
     </motion.div>
+  );
+}
+
+function FaqItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={() => setOpen((o) => !o)}
+      className="w-full text-left py-5 focus:outline-none"
+    >
+      <div className="flex items-center justify-between gap-4">
+        <span
+          className={`text-base md:text-lg font-medium transition-colors ${
+            open ? "text-slate-900" : "text-slate-700"
+          }`}
+        >
+          {q}
+        </span>
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.25 }}
+          className="flex-shrink-0 text-slate-500"
+        >
+          <ChevronDown size={18} />
+        </motion.span>
+      </div>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.p
+            initial={{ height: 0, opacity: 0, marginTop: 0 }}
+            animate={{ height: "auto", opacity: 1, marginTop: 10 }}
+            exit={{ height: 0, opacity: 0, marginTop: 0 }}
+            transition={{ duration: 0.25 }}
+            className="text-sm text-slate-600 leading-relaxed overflow-hidden"
+          >
+            {a}
+          </motion.p>
+        )}
+      </AnimatePresence>
+    </button>
   );
 }
 
@@ -396,71 +349,172 @@ function SmallServiceCard({
 
 export default function ServicesPage() {
   return (
-    <div>
+    <div className="bg-[#FAFAF7]">
       {/* Hero */}
-      <section className="pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 grid-bg-dark" />
-        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px]" />
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-light bg-accent/15 rounded-full border border-accent/25 mb-4">
-              Services
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 text-white">
-              What We <span className="gradient-text">Build</span>
-            </h1>
-            <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
-              End-to-end engineering — from web and mobile apps to custom backend systems.
-              We cover every layer of the stack.
-            </p>
-          </motion.div>
+      <PageHero
+        label="Service"
+        title={
+          <>
+            What We
+            <br />
+            Build
+          </>
+        }
+        description="End-to-end engineering — from web and mobile apps to custom backend systems, AI features, and dedicated squads. We cover every layer of the stack."
+        actions={
+          <>
+            <Link
+              href="/contact"
+              className="inline-flex items-center px-6 py-3 rounded-full bg-accent hover:bg-accent-dark text-white text-sm font-medium transition-all shadow-sm"
+            >
+              Start a Project
+            </Link>
+            <Link
+              href="/projects"
+              className="inline-flex items-center px-6 py-3 rounded-full border border-slate-300 hover:border-accent/60 text-slate-700 hover:text-accent-dark text-sm font-medium transition-all"
+            >
+              See Our Work
+            </Link>
+          </>
+        }
+      />
+
+      {/* Core services — alternating rows */}
+      <section className="py-16 md:py-24">
+        <div className="max-w-container mx-auto px-6 space-y-24 md:space-y-32">
+          {coreServices.map((s, i) => (
+            <CoreServiceRow key={s.title} service={s} index={i} />
+          ))}
         </div>
       </section>
 
-      {/* Core Services with Device Mockups */}
-      <div className="max-w-6xl mx-auto px-6 space-y-24 py-16">
-        {coreServices.map((s, i) => (
-          <CoreServiceCard key={s.title} service={s} index={i} />
-        ))}
-      </div>
+      {/* How we work — process */}
+      <section className="py-20 md:py-28 bg-white border-y border-slate-200">
+        <div className="max-w-container mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-10 mb-14">
+            <div className="flex items-start gap-4">
+              <span className="text-sm text-slate-500 mt-2">Process</span>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 leading-[1.15]">
+                How We Work,
+                <br />
+                Sprint by Sprint
+              </h2>
+            </div>
+            <p className="text-slate-600 text-[15px] leading-relaxed md:pt-6">
+              Transparent, iterative, and predictable. You see working software
+              every week — never a black box, never a surprise on delivery day.
+            </p>
+          </div>
 
-      {/* Other Services */}
-      <SectionWrapper className="max-w-6xl mx-auto px-6">
-        <SectionHeading
-          badge="Also"
-          title="More Services"
-          description="Beyond our core offerings, we provide specialized expertise across the full engineering spectrum."
-        />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {otherServices.map((s, i) => (
-            <SmallServiceCard key={s.title} service={s} index={i} />
-          ))}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {process.map((p, i) => (
+              <motion.div
+                key={p.step}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+                className="rounded-2xl bg-[#FAFAF7] border border-slate-200 p-6"
+              >
+                <div className="text-xs font-semibold tracking-[0.18em] text-accent-dark mb-4">
+                  {p.step}
+                </div>
+                <h4 className="text-xl font-semibold text-slate-900 mb-2">
+                  {p.title}
+                </h4>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  {p.body}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </SectionWrapper>
+      </section>
+
+      {/* Also we build — secondary services */}
+      <section className="py-20 md:py-28">
+        <div className="max-w-container mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-10 mb-14">
+            <div className="flex items-start gap-4">
+              <span className="text-sm text-slate-500 mt-2">Also</span>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 leading-[1.15]">
+                More Ways
+                <br />
+                We Can Help
+              </h2>
+            </div>
+            <p className="text-slate-600 text-[15px] leading-relaxed md:pt-6">
+              Beyond our core offering, we embed with your team on anything that
+              needs senior engineering muscle — from cloud infra to AI features
+              to full-squad augmentation.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {otherServices.map((s, i) => (
+              <SmallServiceCard key={s.title} service={s} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 md:py-28 bg-white border-t border-slate-200">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="flex items-start gap-4 mb-10">
+            <span className="text-sm text-slate-500 mt-2">FAQ</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 leading-[1.15]">
+              Questions, answered.
+            </h2>
+          </div>
+          <div className="divide-y divide-slate-200 border-y border-slate-200">
+            {faqs.map((f) => (
+              <FaqItem key={f.q} q={f.q} a={f.a} />
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
-      <SectionWrapper className="max-w-4xl mx-auto px-6">
-        <div className="bg-gradient-to-br from-slate-800 via-[#1E1B4B]/50 to-slate-800 border border-slate-700/50 rounded-2xl p-10 md:p-14 text-center">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-4">
-            Ready to build something great?
-          </h2>
-          <p className="text-slate-400 text-lg mb-8 max-w-xl mx-auto">
-            Tell us about your project and we&apos;ll craft the perfect technical
-            approach for your goals.
-          </p>
-          <Link
-            href="/contact"
-            className="group inline-flex items-center gap-2 px-8 py-3.5 bg-accent hover:bg-accent-light text-white font-semibold rounded-lg transition-all hover:shadow-lg hover:shadow-accent/20"
-          >
-            Start a Project
-            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
+      <section className="py-20 md:py-28">
+        <div className="max-w-container mx-auto px-6">
+          <div className="relative rounded-[28px] overflow-hidden bg-gradient-to-br from-[#8FA77B] via-[#7C9A6B] to-[#6B8A5C] p-10 md:p-16 text-center">
+            <div
+              className="absolute inset-0 opacity-[0.09] mix-blend-overlay pointer-events-none"
+              style={{
+                backgroundImage:
+                  "radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px)",
+                backgroundSize: "22px 22px",
+              }}
+            />
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-white mb-4 leading-[1.15]">
+                Ready to build
+                <br />
+                something great?
+              </h2>
+              <p className="text-white/80 text-[15px] leading-relaxed max-w-xl mx-auto mb-8">
+                Tell us about your project and we&apos;ll come back with a
+                precise scope, a timeline, and the team who&apos;ll ship it.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center px-6 py-3 rounded-full bg-[#F3F4EE] hover:bg-white text-slate-900 text-sm font-medium transition-all"
+                >
+                  Start a Project
+                </Link>
+                <Link
+                  href="/projects"
+                  className="inline-flex items-center px-6 py-3 rounded-full border border-white/40 text-white hover:bg-white/10 text-sm font-medium transition-all"
+                >
+                  See Case Studies
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
-      </SectionWrapper>
+      </section>
     </div>
   );
 }

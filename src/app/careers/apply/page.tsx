@@ -17,6 +17,7 @@ import {
   Linkedin,
   Globe,
   ArrowLeft,
+  ArrowUpRight,
   CheckCircle2,
   Loader2,
   AlertCircle,
@@ -74,56 +75,87 @@ function generateRegId(): string {
   return `TL-INT-${y}${m}-${rand}`;
 }
 
-/* ─── Input Field Component ─── */
+/* ─── Input styles ─── */
+const inputClass =
+  "w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all";
+
+const textareaClass =
+  "w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30 transition-all resize-none";
+
+/* ─── Field wrapper ─── */
 function Field({
   label,
-  icon: Icon,
   required = false,
   children,
 }: {
   label: string;
-  icon: React.ElementType;
   required?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div className="space-y-2">
-      <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
-        <Icon size={14} className="text-accent-light" />
+      <label className="text-sm font-medium text-slate-800">
         {label}
-        {required && <span className="text-red-400">*</span>}
+        {required && <span className="text-accent-dark ml-1">*</span>}
       </label>
       {children}
     </div>
   );
 }
 
-const inputClass =
-  "w-full px-4 py-3 rounded-xl bg-slate-800/60 border border-slate-700/50 text-white placeholder:text-slate-500 text-sm focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all";
-
-const textareaClass =
-  "w-full px-4 py-3 rounded-xl bg-slate-800/60 border border-slate-700/50 text-white placeholder:text-slate-500 text-sm focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all resize-none";
+/* ─── Section wrapper ─── */
+function Section({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl bg-white border border-slate-200 px-6 md:px-8 py-7 md:py-8 space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
+        {description && (
+          <p className="text-sm text-slate-500 mt-1">{description}</p>
+        )}
+      </div>
+      <div className="space-y-5">{children}</div>
+    </div>
+  );
+}
 
 /* ─── Role config ─── */
 const roles = {
   sales: {
-    title: "Business Development (Sales) Intern",
-    firestoreRole: "Business Development (Sales) Intern",
-    color: "accent",
-    badgeClass: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25",
+    title: "Business Development Intern (Sales)",
+    firestoreRole: "Business Development Intern (Sales)",
+    tagline:
+      "Help us find and connect with the clients who'll shape TenserLabs' next chapter.",
   },
   tech: {
-    title: "Tech (Development) Intern",
-    firestoreRole: "Tech (Development) Intern",
-    color: "cyan",
-    badgeClass: "bg-cyan-500/15 text-cyan-400 border-cyan-500/25",
+    title: "Full-Stack Developer (Intern)",
+    firestoreRole: "Full-Stack Developer (Intern)",
+    tagline:
+      "Ship real features on live client products alongside our engineering team.",
   },
 } as const;
+
+type RoleKey = keyof typeof roles;
+
+function resolveRoleKey(raw: string | null): RoleKey {
+  // Accept legacy ?role=tech / ?role=sales AND the new ?role=fullstack-intern / ?role=bd-intern.
+  if (!raw) return "sales";
+  const r = raw.toLowerCase();
+  if (r === "tech" || r === "fullstack-intern" || r === "fullstack") return "tech";
+  return "sales";
+}
 
 /* ─── Page (wrapper with Suspense for useSearchParams) ─── */
 export default function ApplyPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#FAFAF7]" />}>
       <ApplyForm />
     </Suspense>
   );
@@ -131,7 +163,7 @@ export default function ApplyPage() {
 
 function ApplyForm() {
   const searchParams = useSearchParams();
-  const roleKey = searchParams.get("role") === "tech" ? "tech" : "sales";
+  const roleKey = resolveRoleKey(searchParams.get("role"));
   const roleInfo = useMemo(() => roles[roleKey], [roleKey]);
 
   const [form, setForm] = useState<FormData>(initialForm);
@@ -142,9 +174,14 @@ function ApplyForm() {
   const [copied, setCopied] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const set = (field: keyof FormData) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
+  const set =
+    (field: keyof FormData) =>
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >
+    ) =>
+      setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
   /* ── Submit ── */
   const handleSubmit = async (e: React.FormEvent) => {
@@ -152,7 +189,6 @@ function ApplyForm() {
     setStatus("submitting");
 
     try {
-      // 1. Check for duplicate email
       const emailQuery = query(
         collection(db, "intern_applications"),
         where("email", "==", form.email.toLowerCase().trim())
@@ -164,10 +200,8 @@ function ApplyForm() {
         return;
       }
 
-      // 2. Generate reg ID
       const id = generateRegId();
 
-      // 3. Save to Firestore
       await addDoc(collection(db, "intern_applications"), {
         regId: id,
         name: form.name.trim(),
@@ -201,58 +235,55 @@ function ApplyForm() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  /* ── Success State ── */
+  /* ── Success state ── */
   if (status === "success") {
     return (
-      <div className="min-h-screen flex items-center justify-center px-6 relative">
-        <div className="absolute inset-0 grid-bg-dark" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-accent/8 rounded-full blur-[140px] pointer-events-none" />
+      <div className="min-h-screen bg-[#FAFAF7] flex items-center justify-center px-6 pt-28 pb-20">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="relative z-10 max-w-lg w-full text-center"
+          className="max-w-lg w-full text-center"
         >
-          <div className="p-10 rounded-2xl bg-slate-900/80 border border-slate-700/50 backdrop-blur-xl">
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-emerald-500/15 flex items-center justify-center">
-              <CheckCircle2 size={32} className="text-emerald-400" />
+          <div className="p-10 rounded-2xl bg-white border border-slate-200">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+              <CheckCircle2 size={32} className="text-emerald-600" />
             </div>
-            <h2 className="text-2xl font-extrabold text-white mb-2">
-              Application Submitted!
+            <h2 className="text-2xl font-semibold text-slate-900 mb-2">
+              Application submitted
             </h2>
-            <p className="text-slate-400 mb-8">
-              Welcome to the Tenser Labs family. We&apos;ll review your application
-              and get back to you soon.
+            <p className="text-slate-600 mb-8 leading-relaxed">
+              Thanks for applying — we&apos;ll review your submission and get back
+              to you within 48 hours.
             </p>
 
-            {/* Reg ID Card */}
-            <div className="p-5 rounded-xl bg-slate-800/60 border border-accent/20 mb-8">
-              <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">
-                Your Registration ID
+            <div className="p-5 rounded-xl bg-[#F3F4EE] border border-slate-200 mb-8">
+              <p className="text-[11px] text-slate-500 uppercase tracking-[0.14em] mb-2">
+                Registration ID
               </p>
               <div className="flex items-center justify-center gap-3">
-                <span className="text-2xl font-mono font-bold text-accent-light tracking-wider">
+                <span className="text-xl font-mono font-semibold text-accent-dark tracking-wider">
                   {regId}
                 </span>
                 <button
                   onClick={copyRegId}
-                  className="p-2 rounded-lg bg-slate-700/50 hover:bg-accent/20 transition-colors"
+                  className="p-2 rounded-lg hover:bg-white transition-colors"
                   title="Copy ID"
                 >
                   {copied ? (
-                    <Check size={16} className="text-emerald-400" />
+                    <Check size={16} className="text-emerald-600" />
                   ) : (
-                    <Copy size={16} className="text-slate-400" />
+                    <Copy size={16} className="text-slate-500" />
                   )}
                 </button>
               </div>
               <p className="text-xs text-slate-500 mt-2">
-                Save this ID for future reference
+                Save this ID for future reference.
               </p>
             </div>
 
             <Link
               href="/careers"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-light text-white font-medium rounded-xl transition-all hover:shadow-lg hover:shadow-accent/20"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-dark text-white font-medium rounded-full transition-all"
             >
               <ArrowLeft size={16} />
               Back to Careers
@@ -263,40 +294,38 @@ function ApplyForm() {
     );
   }
 
+  /* ── Form ── */
   return (
-    <div className="relative">
-      <div className="absolute inset-0 grid-bg-dark" />
-      <div className="absolute top-1/4 right-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 left-0 w-[300px] h-[300px] bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
-
-      <div className="relative z-10 max-w-3xl mx-auto px-6 pt-28 pb-20">
+    <div className="min-h-screen bg-[#FAFAF7]">
+      <div className="max-w-3xl mx-auto px-6 pt-28 md:pt-32 pb-20">
         {/* Back link */}
         <Link
           href="/careers"
-          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-accent-light transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-accent-dark transition-colors mb-10"
         >
           <ArrowLeft size={14} />
           Back to Careers
         </Link>
 
-        {/* Header */}
+        {/* Header — Altris-style: label left + big headline split */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-10"
+          className="grid md:grid-cols-[auto_1fr] gap-4 md:gap-6 items-start mb-12"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold uppercase tracking-wider rounded-full border ${roleInfo.badgeClass}`}>
-              <Rocket size={12} /> Internship
-            </span>
+          <span className="text-sm text-slate-500 md:mt-2 whitespace-nowrap">
+            Application
+          </span>
+          <div>
+            <h1 className="text-3xl md:text-5xl font-semibold tracking-tight text-slate-900 leading-[1.1]">
+              {roleInfo.title}
+            </h1>
+            <p className="text-slate-600 text-[15px] leading-relaxed mt-4 max-w-lg">
+              {roleInfo.tagline} Fill in the form below and we&apos;ll reply
+              within 48 hours.
+            </p>
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-3">
-            Apply — <span className="gradient-text">{roleInfo.title}</span>
-          </h1>
-          <p className="text-slate-400 text-lg">
-            Fill in the form below and we&apos;ll get back to you within 48 hours.
-          </p>
         </motion.div>
 
         {/* Form */}
@@ -306,17 +335,12 @@ function ApplyForm() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="space-y-10"
+          className="space-y-6"
         >
-          {/* ── Section: Personal Info ── */}
-          <div className="p-6 md:p-8 rounded-2xl bg-slate-900/60 border border-slate-700/40 backdrop-blur-sm space-y-6">
-            <h3 className="text-base font-semibold text-white flex items-center gap-2">
-              <User size={16} className="text-accent-light" />
-              Personal Information
-            </h3>
-
+          {/* Personal Info */}
+          <Section title="Personal information">
             <div className="grid sm:grid-cols-2 gap-5">
-              <Field label="Full Name" icon={User} required>
+              <Field label="Full name" required>
                 <input
                   type="text"
                   required
@@ -326,8 +350,7 @@ function ApplyForm() {
                   className={inputClass}
                 />
               </Field>
-
-              <Field label="Email Address" icon={Mail} required>
+              <Field label="Email address" required>
                 <input
                   type="email"
                   required
@@ -337,8 +360,7 @@ function ApplyForm() {
                   className={inputClass}
                 />
               </Field>
-
-              <Field label="Phone Number" icon={Phone} required>
+              <Field label="Phone number" required>
                 <input
                   type="tel"
                   required
@@ -349,17 +371,12 @@ function ApplyForm() {
                 />
               </Field>
             </div>
-          </div>
+          </Section>
 
-          {/* ── Section: Education ── */}
-          <div className="p-6 md:p-8 rounded-2xl bg-slate-900/60 border border-slate-700/40 backdrop-blur-sm space-y-6">
-            <h3 className="text-base font-semibold text-white flex items-center gap-2">
-              <GraduationCap size={16} className="text-accent-light" />
-              Education
-            </h3>
-
+          {/* Education */}
+          <Section title="Education">
             <div className="grid sm:grid-cols-2 gap-5">
-              <Field label="College / University" icon={GraduationCap} required>
+              <Field label="College / university" required>
                 <input
                   type="text"
                   required
@@ -369,8 +386,7 @@ function ApplyForm() {
                   className={inputClass}
                 />
               </Field>
-
-              <Field label="Course & Year" icon={GraduationCap} required>
+              <Field label="Course & year" required>
                 <input
                   type="text"
                   required
@@ -381,17 +397,12 @@ function ApplyForm() {
                 />
               </Field>
             </div>
-          </div>
+          </Section>
 
-          {/* ── Section: Availability ── */}
-          <div className="p-6 md:p-8 rounded-2xl bg-slate-900/60 border border-slate-700/40 backdrop-blur-sm space-y-6">
-            <h3 className="text-base font-semibold text-white flex items-center gap-2">
-              <Calendar size={16} className="text-accent-light" />
-              Availability & Resume
-            </h3>
-
+          {/* Availability */}
+          <Section title="Availability & resume">
             <div className="grid sm:grid-cols-2 gap-5">
-              <Field label="Start Date Availability" icon={Calendar} required>
+              <Field label="Start date" required>
                 <input
                   type="date"
                   required
@@ -400,8 +411,7 @@ function ApplyForm() {
                   className={inputClass}
                 />
               </Field>
-
-              <Field label="Resume (Google Drive link)" icon={FileText} required>
+              <Field label="Resume (Google Drive link)" required>
                 <input
                   type="url"
                   required
@@ -412,27 +422,21 @@ function ApplyForm() {
                 />
               </Field>
             </div>
-          </div>
+          </Section>
 
-          {/* ── Section: About You ── */}
-          <div className="p-6 md:p-8 rounded-2xl bg-slate-900/60 border border-slate-700/40 backdrop-blur-sm space-y-6">
-            <h3 className="text-base font-semibold text-white flex items-center gap-2">
-              <MessageSquare size={16} className="text-accent-light" />
-              About You
-            </h3>
-
-            <Field label="Why Tenser Labs?" icon={MessageSquare} required>
+          {/* About You */}
+          <Section title="About you">
+            <Field label="Why TenserLabs?" required>
               <textarea
                 required
                 rows={4}
-                placeholder="Tell us what excites you about joining Tenser Labs..."
+                placeholder="Tell us what excites you about joining TenserLabs…"
                 value={form.whyTenserLabs}
                 onChange={set("whyTenserLabs")}
                 className={textareaClass}
               />
             </Field>
-
-            <Field label="How did you hear about us?" icon={Radio} required>
+            <Field label="How did you hear about us?" required>
               <select
                 required
                 value={form.howDidYouHear}
@@ -445,46 +449,41 @@ function ApplyForm() {
                 <option value="LinkedIn">LinkedIn</option>
                 <option value="Instagram">Instagram</option>
                 <option value="Twitter/X">Twitter / X</option>
-                <option value="College Placement Cell">College Placement Cell</option>
+                <option value="College Placement Cell">
+                  College placement cell
+                </option>
                 <option value="Friend / Referral">Friend / Referral</option>
-                <option value="Google Search">Google Search</option>
+                <option value="Google Search">Google search</option>
                 <option value="Other">Other</option>
               </select>
             </Field>
-          </div>
+          </Section>
 
-          {/* ── Section: Optional ── */}
-          <div className="p-6 md:p-8 rounded-2xl bg-slate-900/40 border border-dashed border-slate-700/40 backdrop-blur-sm space-y-6">
-            <h3 className="text-base font-semibold text-white flex items-center gap-2">
-              <Briefcase size={16} className="text-slate-500" />
-              Optional
-              <span className="text-xs font-normal text-slate-500">
-                (but helps your application)
-              </span>
-            </h3>
-
-            <Field label="Experience (if any)" icon={Briefcase}>
+          {/* Optional */}
+          <Section
+            title="Optional"
+            description="Helps your application but not required."
+          >
+            <Field label="Experience (if any)">
               <textarea
                 rows={3}
-                placeholder="E.g., Sales internship at XYZ, freelance lead generation..."
+                placeholder="E.g., Sales internship at XYZ, freelance lead generation…"
                 value={form.experience}
                 onChange={set("experience")}
                 className={textareaClass}
               />
             </Field>
-
             <div className="grid sm:grid-cols-2 gap-5">
-              <Field label="LinkedIn Profile" icon={Linkedin}>
+              <Field label="LinkedIn profile">
                 <input
                   type="url"
-                  placeholder="https://linkedin.com/in/..."
+                  placeholder="https://linkedin.com/in/…"
                   value={form.linkedin}
                   onChange={set("linkedin")}
                   className={inputClass}
                 />
               </Field>
-
-              <Field label="Portfolio / Website" icon={Globe}>
+              <Field label="Portfolio / website">
                 <input
                   type="url"
                   placeholder="https://yoursite.com"
@@ -494,24 +493,29 @@ function ApplyForm() {
                 />
               </Field>
             </div>
-          </div>
+          </Section>
 
-          {/* ── Errors ── */}
+          {/* Errors */}
           <AnimatePresence>
             {status === "duplicate" && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="flex items-start gap-3 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20"
+                className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200"
               >
-                <AlertCircle size={18} className="text-amber-400 flex-shrink-0 mt-0.5" />
+                <AlertCircle
+                  size={18}
+                  className="text-amber-600 flex-shrink-0 mt-0.5"
+                />
                 <div>
-                  <p className="text-sm font-medium text-amber-300">
+                  <p className="text-sm font-medium text-amber-800">
                     This email has already been used
                   </p>
-                  <p className="text-xs text-amber-400/70 mt-1">
-                    An application with this email address already exists. Please use a different email or contact us if you think this is a mistake.
+                  <p className="text-xs text-amber-700 mt-1">
+                    An application with this email already exists. Please use a
+                    different email or contact us if you think this is a
+                    mistake.
                   </p>
                 </div>
               </motion.div>
@@ -522,45 +526,46 @@ function ApplyForm() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20"
+                className="flex items-start gap-3 p-4 rounded-xl bg-red-50 border border-red-200"
               >
-                <AlertCircle size={18} className="text-red-400 flex-shrink-0 mt-0.5" />
+                <AlertCircle
+                  size={18}
+                  className="text-red-600 flex-shrink-0 mt-0.5"
+                />
                 <div>
-                  <p className="text-sm font-medium text-red-300">
+                  <p className="text-sm font-medium text-red-800">
                     Something went wrong
                   </p>
-                  <p className="text-xs text-red-400/70 mt-1">
-                    Please try again. If the issue persists, reach out to us at{" "}
+                  <p className="text-xs text-red-700 mt-1">
+                    Please try again. If it persists, email us at{" "}
                     <a
                       href="mailto:hello@tenserlabs.com"
-                      className="underline hover:text-red-300"
+                      className="underline hover:text-red-900"
                     >
                       hello@tenserlabs.com
                     </a>
+                    .
                   </p>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {/* ── Submit ── */}
-          <div className="flex flex-col sm:flex-row items-center gap-4">
+          {/* Submit */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
             <button
               type="submit"
               disabled={status === "submitting"}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-10 py-4 bg-accent hover:bg-accent-light disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all hover:shadow-lg hover:shadow-accent/25 text-base"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 pl-2 pr-6 py-2 rounded-full border border-slate-300 hover:border-accent/60 disabled:opacity-60 disabled:cursor-not-allowed text-slate-900 font-medium transition-all text-base"
             >
-              {status === "submitting" ? (
-                <>
-                  <Loader2 size={18} className="animate-spin" />
-                  Submitting...
-                </>
-              ) : (
-                <>
-                  Submit Application
-                  <Rocket size={16} />
-                </>
-              )}
+              <span className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center group-hover:bg-accent-dark transition-colors">
+                {status === "submitting" ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <ArrowUpRight size={16} strokeWidth={2.4} />
+                )}
+              </span>
+              {status === "submitting" ? "Submitting…" : "Submit application"}
             </button>
             <span className="text-xs text-slate-500">
               By applying, you agree to our privacy policy.

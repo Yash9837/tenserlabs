@@ -39,15 +39,15 @@ export function SectionHeading({
   return (
     <div className="text-center mb-16">
       {badge && (
-        <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-light bg-accent/15 rounded-full border border-accent/25 mb-4">
+        <span className="inline-block px-4 py-1.5 text-xs font-medium text-accent-dark bg-accent/15 rounded-full border border-accent/25 mb-4">
           {badge}
         </span>
       )}
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-4">
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
         {title}
       </h2>
       {description && (
-        <p className="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+        <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
           {description}
         </p>
       )}
@@ -82,14 +82,14 @@ export function AnimatedCounter({ target, label }: { target: number; label: stri
       <div className="text-3xl md:text-4xl font-extrabold gradient-text">
         {count}+
       </div>
-      <div className="text-sm text-slate-400 mt-1">{label}</div>
+      <div className="text-sm text-slate-500 mt-1">{label}</div>
     </div>
   );
 }
 
 export function TechBadge({ name }: { name: string }) {
   return (
-    <span className="inline-flex items-center px-2.5 py-1 text-xs font-medium bg-slate-800/50 text-slate-300 border border-slate-700/50 rounded-full">
+    <span className="inline-flex items-center px-2.5 py-1 text-xs font-medium bg-white/80 text-slate-700 border border-slate-200/80 rounded-full">
       {name}
     </span>
   );
