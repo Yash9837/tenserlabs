@@ -1,9 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
+
+type RoleDescription = {
+  intro: string;
+  meta: string[];
+  whatYoullDo: string[];
+};
 
 type Role = {
   title: string;
@@ -12,6 +19,7 @@ type Role = {
   type: string;
   href: string;
   paused?: boolean;
+  description?: RoleDescription;
 };
 
 type RoleGroup = {
@@ -42,10 +50,119 @@ const groups: RoleGroup[] = [
         level: "Intern",
         type: "Internship",
         href: "/careers/apply?role=bd-intern",
+        description: {
+          intro:
+            "Are you a go-getter with a passion for sales and technology? Tenser Labs is looking for a Business Development (Sales) to help us connect with exciting clients and grow our IT consulting business.",
+          meta: ["📍 Work from home", "📅 Start Date: Immediately"],
+          whatYoullDo: [
+            "Hunt for clients (startups, small businesses, local brands) who need software or app development.",
+            "Reach out via LinkedIn, email, and calls.",
+            "Qualify leads and schedule meetings with our founding team.",
+            "Earn 10–15% commission on every closed deal — on top of your stipend!",
+          ],
+        },
       },
     ],
   },
 ];
+
+function RoleItem({ role }: { role: Role }) {
+  const [open, setOpen] = useState(false);
+  const hasDescription = !!role.description;
+
+  return (
+    <li className="py-5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <button
+          type="button"
+          onClick={() => hasDescription && setOpen((v) => !v)}
+          className={`text-left flex-1 ${
+            hasDescription ? "cursor-pointer" : "cursor-default"
+          }`}
+          aria-expanded={hasDescription ? open : undefined}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <span className="font-semibold text-slate-900">{role.title}</span>
+            {hasDescription && (
+              <ChevronDown
+                size={16}
+                className={`text-slate-400 transition-transform ${
+                  open ? "rotate-180" : ""
+                }`}
+              />
+            )}
+          </div>
+          <div className="flex flex-wrap gap-x-6 gap-y-1 text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-500">
+            <span>{role.location}</span>
+            <span>{role.level}</span>
+            <span>{role.type}</span>
+          </div>
+        </button>
+
+        {role.paused ? (
+          <span
+            className="shrink-0 inline-flex items-center px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-slate-500 text-sm font-medium cursor-not-allowed"
+            aria-label={`Applications paused for ${role.title}`}
+          >
+            Applications Paused
+          </span>
+        ) : (
+          <Link
+            href={role.href}
+            className="group shrink-0 inline-flex items-center gap-2 pl-1.5 pr-5 py-1.5 rounded-full border border-slate-300 hover:border-accent/60 transition-colors text-slate-900"
+            aria-label={`Apply for ${role.title}`}
+          >
+            <span className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center group-hover:bg-accent-dark transition-colors">
+              <ArrowUpRight size={14} strokeWidth={2.4} />
+            </span>
+            <span className="text-sm font-medium">Apply</span>
+          </Link>
+        )}
+      </div>
+
+      <AnimatePresence initial={false}>
+        {hasDescription && open && role.description && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="overflow-hidden"
+          >
+            <div className="mt-5 pt-5 border-t border-slate-100 space-y-5 text-[15px] leading-relaxed text-slate-700">
+              <p>{role.description.intro}</p>
+
+              <div>
+                <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-500 mb-2">
+                  About the Role
+                </p>
+                <ul className="space-y-1.5">
+                  {role.description.meta.map((m) => (
+                    <li key={m}>{m}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-500 mb-2">
+                  What You&apos;ll Do
+                </p>
+                <ul className="space-y-1.5">
+                  {role.description.whatYoullDo.map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="text-emerald-600 shrink-0">✅</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </li>
+  );
+}
 
 export default function CareersPage() {
   return (
@@ -117,41 +234,7 @@ export default function CareersPage() {
 
               <ul className="divide-y divide-slate-200">
                 {group.roles.map((role) => (
-                  <li
-                    key={role.title}
-                    className="py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-                  >
-                    <div>
-                      <div className="font-semibold text-slate-900 mb-2">
-                        {role.title}
-                      </div>
-                      <div className="flex flex-wrap gap-x-6 gap-y-1 text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-500">
-                        <span>{role.location}</span>
-                        <span>{role.level}</span>
-                        <span>{role.type}</span>
-                      </div>
-                    </div>
-
-                    {role.paused ? (
-                      <span
-                        className="shrink-0 inline-flex items-center px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-slate-500 text-sm font-medium cursor-not-allowed"
-                        aria-label={`Applications paused for ${role.title}`}
-                      >
-                        Applications Paused
-                      </span>
-                    ) : (
-                      <Link
-                        href={role.href}
-                        className="group shrink-0 inline-flex items-center gap-2 pl-1.5 pr-5 py-1.5 rounded-full border border-slate-300 hover:border-accent/60 transition-colors text-slate-900"
-                        aria-label={`Apply for ${role.title}`}
-                      >
-                        <span className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center group-hover:bg-accent-dark transition-colors">
-                          <ArrowUpRight size={14} strokeWidth={2.4} />
-                        </span>
-                        <span className="text-sm font-medium">Apply</span>
-                      </Link>
-                    )}
-                  </li>
+                  <RoleItem key={role.title} role={role} />
                 ))}
               </ul>
             </motion.div>
