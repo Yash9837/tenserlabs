@@ -11,6 +11,7 @@ type Role = {
   level: string;
   type: string;
   href: string;
+  paused?: boolean;
 };
 
 type RoleGroup = {
@@ -28,6 +29,7 @@ const groups: RoleGroup[] = [
         level: "Intern",
         type: "Internship",
         href: "/careers/apply?role=fullstack-intern",
+        paused: true,
       },
     ],
   },
@@ -130,16 +132,25 @@ export default function CareersPage() {
                       </div>
                     </div>
 
-                    <Link
-                      href={role.href}
-                      className="group shrink-0 inline-flex items-center gap-2 pl-1.5 pr-5 py-1.5 rounded-full border border-slate-300 hover:border-accent/60 transition-colors text-slate-900"
-                      aria-label={`Apply for ${role.title}`}
-                    >
-                      <span className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center group-hover:bg-accent-dark transition-colors">
-                        <ArrowUpRight size={14} strokeWidth={2.4} />
+                    {role.paused ? (
+                      <span
+                        className="shrink-0 inline-flex items-center px-4 py-2 rounded-full border border-slate-200 bg-slate-50 text-slate-500 text-sm font-medium cursor-not-allowed"
+                        aria-label={`Applications paused for ${role.title}`}
+                      >
+                        Applications Paused
                       </span>
-                      <span className="text-sm font-medium">Apply</span>
-                    </Link>
+                    ) : (
+                      <Link
+                        href={role.href}
+                        className="group shrink-0 inline-flex items-center gap-2 pl-1.5 pr-5 py-1.5 rounded-full border border-slate-300 hover:border-accent/60 transition-colors text-slate-900"
+                        aria-label={`Apply for ${role.title}`}
+                      >
+                        <span className="w-8 h-8 rounded-full bg-accent text-white flex items-center justify-center group-hover:bg-accent-dark transition-colors">
+                          <ArrowUpRight size={14} strokeWidth={2.4} />
+                        </span>
+                        <span className="text-sm font-medium">Apply</span>
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

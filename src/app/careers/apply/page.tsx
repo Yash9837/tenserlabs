@@ -133,12 +133,14 @@ const roles = {
     firestoreRole: "Business Development Intern (Sales)",
     tagline:
       "Help us find and connect with the clients who'll shape TenserLabs' next chapter.",
+    paused: false,
   },
   tech: {
     title: "Full-Stack Developer (Intern)",
     firestoreRole: "Full-Stack Developer (Intern)",
     tagline:
       "Ship real features on live client products alongside our engineering team.",
+    paused: true,
   },
 } as const;
 
@@ -173,6 +175,41 @@ function ApplyForm() {
   const [regId, setRegId] = useState("");
   const [copied, setCopied] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+
+  if (roleInfo.paused) {
+    return (
+      <div className="min-h-screen bg-[#FAFAF7] flex items-center justify-center px-6 pt-28 pb-20">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-lg w-full text-center"
+        >
+          <div className="p-10 rounded-2xl bg-white border border-slate-200">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
+              <AlertCircle size={32} className="text-amber-600" />
+            </div>
+            <h2 className="text-2xl font-semibold text-slate-900 mb-2">
+              Applications paused
+            </h2>
+            <p className="text-slate-600 mb-8 leading-relaxed">
+              We&apos;re not currently accepting applications for the{" "}
+              <span className="font-medium text-slate-900">
+                {roleInfo.title}
+              </span>{" "}
+              role. Please check back soon, or explore our other open roles.
+            </p>
+            <Link
+              href="/careers"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent-dark text-white font-medium rounded-full transition-all"
+            >
+              <ArrowLeft size={16} />
+              Back to Careers
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   const set =
     (field: keyof FormData) =>
