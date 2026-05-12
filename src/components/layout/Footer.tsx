@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Github,
   Linkedin,
@@ -35,6 +38,9 @@ const socials = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/admin")) return null;
+
   return (
     <footer className="bg-[#FAFAF7] border-t border-slate-200">
       <div className="max-w-container mx-auto px-6 py-16">

@@ -2,9 +2,13 @@
 
 import { MessageSquare } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
 export default function FloatingCTA() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/admin")) return null;
+
   return (
     <motion.div
       initial={{ scale: 0, opacity: 0 }}

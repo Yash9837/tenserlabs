@@ -19,6 +19,10 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
+
+  // Admin area has its own chrome — don't render the public navbar there.
+  if (pathname?.startsWith("/admin")) return null;
+
   const hasDarkHero = pathname === "/"; // only the home page has the sage hero panel
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -91,7 +95,7 @@ export default function Navbar() {
 
         <div className="hidden lg:flex items-center gap-3">
           <Link
-            href="/contact"
+            href="/admin/login"
             className={`px-5 py-2 text-sm font-medium rounded-full transition-all ${
               onDark
                 ? "bg-white text-slate-900 hover:bg-white/90"
@@ -146,7 +150,7 @@ export default function Navbar() {
                 className="pt-6"
               >
                 <Link
-                  href="/contact"
+                  href="/admin/login"
                   onClick={() => setMobileOpen(false)}
                   className="block w-full text-center px-5 py-3 text-base font-medium bg-accent hover:bg-accent-dark text-white rounded-full transition-all"
                 >
